@@ -1,0 +1,130 @@
+h1 {
+    text-align: center;
+    /* color: green; */
+}
+
+* {
+    box-sizing: border-box;
+  }
+
+
+input[type=text], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+  }
+
+input[type=checkbox] {
+  margin-top: 16px;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  /* text-align: end; */
+}
+
+label {
+  padding: 12px 12px 12px 0;
+  display: inline-block;
+  /* color: 'green'; */
+}
+
+input[type=submit], button[type=button] {
+  background-color: #04AA6D;
+  color: white;
+  margin-top: 16px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  float: right;
+}
+
+button:disabled, input[type=submit]:disabled {
+  background-color: #7f8f89;
+  cursor: no-drop;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+  /* Clear floats after the columns */
+.row::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+    .col-25, .col-75, input[type=submit] {
+      width: 100%;
+      margin-top: 0;
+    }
+}
+
+div.formAdding {
+  width: 100%;
+}
+
+form {
+  /* display: inline-block; */
+  margin: 10px;
+  width: 45%;
+  float: inline-start;
+}
+
+table {
+  width: 10%;
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border-width: 1px;
+  border-style: solid;
+  border-color: aquamarine;
+}
+
+input.error, select.error {
+  border: 1px solid red;
+}
+
+span.message {
+  color: gray;
+  float: left;
+}
+
+span.error {
+  color: red;
+  /* border: 1px solid red; */
+}
+
+.openfile {
+  /* display: inline;
+  justify-self: center;
+  align-items: center; */
+  /* height: 10px; */
+  color: white;
+  margin-top: 10px;
+  margin-left: 20px;
+  padding: 5px 15px;
+  border: 0.5px solid;
+  border-radius: 4px;
+  cursor: pointer;
+  /* float: right; */
+}
+
+.buttonid {
+  margin-top: 0;
+  background-color: blue;
+}
