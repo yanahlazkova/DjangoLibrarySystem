@@ -17,4 +17,6 @@ class Book(models.Model):
 class Reader(models.Model):
     firstname = models.CharField(max_length=255)
     lastname = models.CharField(max_length=255)
+    email = models.EmailField(null=False, unique=True, default='None')
+
 

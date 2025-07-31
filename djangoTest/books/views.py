@@ -2,6 +2,7 @@ import json
 import os
 
 from django.shortcuts import render
+from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 from faker import Faker
@@ -18,7 +19,11 @@ def add_reader_to_db(request):
     fake = Faker(['uk_UA'])
     readers = []
     for _ in range(3):
-        reader = Reader(firstname=fake.first_name(), lastname=fake.last_name())
+        reader = Reader(
+            firstname=fake.first_name(),
+            lastname=fake.last_name(),
+            email=fake.email(domain='ukr.net')
+        )
         reader.save()
     template = loader.get_template('readers.html')
 
@@ -31,6 +36,14 @@ def add_reader_to_db(request):
     return HttpResponse(template.render(context, request))
 
 
+def change_email_reader():
+    fake = Faker()
+    readers = Reader.objects.all()
+    for reader in readers:
+        reader.email = fake.email()
+        reader.save()
+
+
 def readers_all(request):
     template = loader.get_template('readers.html')
 
@@ -40,6 +53,7 @@ def readers_all(request):
         'readers': readers_db,
         'request': request
     }
+    # change_email_reader()
 
     return HttpResponse(template.render(context, request))
 
