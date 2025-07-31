@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library system</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+</head>
+
+<body>
+    <div>
+        <input type="radio" id="green" name="text_color" value="green">
+        <label for="green" style="color: green;">Green color</label>
+        <input type="radio" id="blue" name="text_color" value="lightblue">
+        <label for="blue" style="color: lightblue;">Blue color</label>
+        <button type="button" id="download_json">Download json-file</button>
+
+    </div>
+    <!-- <div>
+        <label id='labelfileInput' for="fileInput">Вибрати файл</label>
+        <span id="fileName" class="file-name">Файл не вибрано</span>
+        <input type="file" id="fileInput" style="display: none;" />
+    </div> -->
+    <div class="container">
+        <!-- <h1 id="bg-grey">Library system</h1> -->
+        <div class="formsAdding">
+            <!-- Форма додавання книг -->
+            <form href="#" class="AddBook" name="addbook">
+                <div class="row">
+                    <div class="col-25">
+                        <label for="bTitle">First Name</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="text" id="bTitle" name="booktitle" placeholder="Your name..">
+                        <span class="error-message" id="titleError"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="author">Last Name</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="text" id="author" name="author" placeholder="Your last name..">
+                        <span class="error-message" id="authorError"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="country">Country</label>
+                    </div>
+                    <div class="col-75">
+                        <select id="country" name="country">
+                            <option value="australia">Australia</option>
+                            <option value="canada">Canada</option>
+                            <option value="usa">USA</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="subject">Subject</label>
+                    </div>
+                    <div class="col-75">
+                        <textarea id="subject" name="subject" placeholder="Write something.."
+                        style="height:200px"></textarea>
+                    </div>
+                </div>
+                <!-- <br> -->
+                <div class="row">
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+            <!-- Форма додавання читача -->
+            <form action="/action_page.php" class="AddReader" id="addReader">
+                <!-- Buttons -->
+                <div class="row">
+                    <button type="button" id="readjson" style="float: left">Read JSON</button>
+                    <button type="button" id="autoreader">Auto fill</button>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-25">
+                        <input type="checkbox" id="issearchid" name="issearchid" style="margin-top: 16px;"> <!-- onchange="findreader.hidden = !this.checked"> -->
+                        <label for="issearchid">Search ID</label>
+                    </div>
+                    <div id="findreader" class="col-75" style="width: 400px;" hidden>
+                        <select id="idreaders" name="idreaders" style="width: 200px; margin-top: 16px;"></select>
+                        <button type="button" id="findid">Find ID</button>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="idreader">Reader-id</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="text" id="idreader" name="idreader" style="width: 200px" placeholder="Your id.." disabled>
+                        <button id="buttonid" type="button" name="idbutton" style="margin-top: 0;">Set ID</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="fname">First Name</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="text" id="fname" name="firstname" placeholder="Your name..">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="lname">Last Name</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="text" id="lname" name="lastname" placeholder="Your last name..">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="email">e-mail</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="email" id="email" name="email" placeholder="Your e-mail..">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="address">Address</label>
+                    </div>
+                    <div class="col-75">
+                        <textarea id="address" name="address" placeholder="Your address.." style="height:200px"></textarea>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <input type="submit" id="writeReader" value="Add reader">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TABLES -->
+    <div class="table">
+        <table id="table">
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+    </div>
+
+
+
+    <div id="api_validation">
+        <input type="number" name="number" id="number" value="0">
+        <button type="submit" onclick="validate()">Validate</button>
+        <p id="result"></p>
+    </div>
+
+
+
+    <script>
+        // const fileInput = document.getElementById("fileInput");
+        // const fileNameDisplay = document.getElementById("fileName");
+        // // const fileUploadButton = document.querySelector(".file-upload-button");
+
+        // fileInput.addEventListener("change", () => {
+        //     if (fileInput.files.length > 0) {
+        //         const fileName = fileInput.files[0].name;
+        //         fileNameDisplay.textContent = fileName;
+        //     } else {
+        //         fileNameDisplay.textContent = "Файл не вибрано";
+        //     }
+        // });
+
+        // fileUploadButton.addEventListener("click", () => {
+        //     fileInput.click();
+        // });
+    </script>
+</body>
+<script>
+    const number = document.getElementById('number');
+    const result = document.getElementById('result');
+    number.setAttribute('min', 20);
+    number.setAttribute('max', 30);
+    // const locat = document.getElementById('submit');
+    // locat.addEventListener('click', () => getLocation());
+
+
+    // function validate() {
+    //     result.innerHTML = number.validationMessage;
+    //     console.log(number.validationMessage);
+
+
+    //     if (navigator.geolocation) {
+    //         navigator.geolocation.getCurrentPosition((position) => { console.log('Latitude:  ' + position.coords.latitude + "\nLongitude: " + position.coords.longitude) }, () => { alert("Sorry, no position available.") });
+    //         navigator.geolocation.getCurrentPosition((position) => { console.log('Latitude:  ' + position.coords.latitude + "\nLongitude: " + position.coords.longitude) }, () => { alert("Sorry, no position available.") });
+    //     } else alert("Geolocation is not supported by this browser.");
+    // }
+
+</script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/faker@5.5.3/dist/faker.min.js"></script> -->
+<script type="module" src="./src/main.js"></script>
+<script type="module" src="./src/api.js"></script>
+
+</html>

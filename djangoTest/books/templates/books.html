@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<style>
+  a {
+  color: green;
+  }
+  table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  }
+  th {
+  text-align: left;
+  }
+  table {
+  border-spacing: 5px;
+}
+</style>
+<body>
+
+<h1>Books from DataBase</h1>
+<br>
+<a href="{% url 'books' %}">HOME</a>
+<p>{{ message }}</p>
+
+<table style="width:100%">
+  <tr color="blue">
+    <th>ID</th>
+    <th>ID-book</th>
+    <th>Title</th>
+    <th>Author</th>
+    <th>Year</th>
+    <th>E-book</th>
+    <th>File of e-book</th>
+    <th>Genre</th>
+  </tr>
+    {% for book in books %}
+  <tr>
+    <td>{{ book.id }}</td>
+    <td>{{ book.book_id }}</td>
+    <td><a href="{% url 'book_id' book.id %}">{{ book.title }}</a></td>
+    <td>{{ book.author }}</td>
+    <td><a href="{% url 'book_year' book.year %}">{{ book.year }}</a></td>
+    <td>{{ book.ebook }}</td>
+    <td>{{ book.filename }}</td>
+    <td><a href="{% url 'book_genre' book.genre %}">{{ book.genre }}</a></td>
+  </tr>
+    {% endfor %}
+</table>
+<!--<a type="button" href='' id="button-next">Продовжити</a>-->
+
+</body>
+</html>
