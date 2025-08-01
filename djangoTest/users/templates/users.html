@@ -18,6 +18,30 @@
 <body>
 <h1>Users from DataBase</h1>
 <a href="{% url 'register_user' %}">Register new user</a>
+
+<div>
+  <table style="width:50%">
+    <tr color="blue">
+      <th>ID</th>
+      <th>Firstname</th>
+      <th>Lastname</th>
+      <th>Login</th>
+      <th>Email</th>
+      <th>Phone</th>
+
+    </tr>
+      {% for user in users %}
+    <tr>
+      <td>{{ user.id }}</td>
+      <td>{{ user.firstname }}</td>
+      <td>{{ user.lastname }}</td>
+      <td>{{ user.login }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.phone }}</td>
+    </tr>
+      {% endfor %}
+  </table>
+</div>
 </body>
 </html>
 

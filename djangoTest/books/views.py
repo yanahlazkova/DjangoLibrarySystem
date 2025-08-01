@@ -176,6 +176,6 @@ def del_books_all(request):
 
     context = {
         # 'message': 'All data deleted..' if book_db == None else 'DataBase'
-        'message': book_db
+        'message': books_db
     }
     return HttpResponse(template.render(context, request))

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User_info</title>
+</head>
+<body>
+    <h1>Hello, {{ lastname }} {{ firstname }}</h1>
+    <h5 color="green">Id: {{ id }}</h5>
+    <div>
+        <label for="email" color="green">Your email: </label>
+        {{ email }}
+    </div>
+    <div>
+        <label for="password" color="green">Your password:</label>
+        {{ password }}
+    </div>
+    <div>
+        <label for="lastname" color="green">Your lastname:</label>
+        {{ lastname }}
+    </div>
+    <div>
+        <label for="firstname" color="green">Your firstname:</label>
+        {{ firstname }}
+    </div>
+    <div>
+        <label for="phone" color="green">Your phone:</label>
+        {{ phone }}
+    </div>
+    <a href="{% url 'list_users' %}">Exit</a>
+    <a href="{% url 'new_user' id %}">Edit</a>
+</form>
+
+</body>
+</html>
