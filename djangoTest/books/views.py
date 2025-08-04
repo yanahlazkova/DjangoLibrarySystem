@@ -133,7 +133,7 @@ def book_by_id(request, id):
     # book_db = Book.objects.get(id=id)
 
     context = {
-        'message': f'Книга з id: {id}' if book_db else 'Дані відсутні',
+        'message': f'Книга з id: {id}',
         # 'book': {
         #     'book_id': book_db.book_id,
         #     'title': book_db.title,

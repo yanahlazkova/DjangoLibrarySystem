@@ -20,6 +20,8 @@
       <td style="color: lightblue; width: 80px">{{ key }}:</td>
       <td style="font-size: 20px">{{ value }}</td>
     </tr>
+  {% empty %}
+  <p class="message-error">Дані відсутні..</p>
 
   {% endfor %}
 </table>
