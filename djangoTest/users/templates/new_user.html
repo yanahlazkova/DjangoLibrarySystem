@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New user</title>
+</head>
+<body>
+<h1>Hello, {{ login }}</h1>
+<form action="{% url 'user_info' id %}" method="post">
+    {% csrf_token %}
+    <div>
+        <input type="hidden" value="{{ id }}" name="id">
+        <input type="hidden" value="{{ login }}" name="login">
+        <input type="hidden" value="{{ email }}" name="email">
+    </div>
+
+    <div>
+        <label for="id_">Your id:</label>
+        <input type="text" id="id_" value="{{ id }}" name="id_" disabled>
+    </div>
+    <div>
+        <label for="login_">Your email: {{ login }}</label>
+        <input type="text" id="login_" value="{{ login }}" name="login_" disabled>
+    </div>
+    <div>
+        <label for="email_">Your email: {{ email }}</label>
+        <input type="text" id="email_" value="{{ email }}" name="email_" disabled>
+    </div>
+    <div>
+        <label for="password">Your password: {{ password }}</label>
+        <input type="text" id="password" value="{{ password }}" name="password">
+    </div>
+    <div>
+        <label for="lastname" color="green">Lastname:</label>
+        <input type="text" id="lastname" value="{{ lastname }}"  name="lastname">
+    </div>
+    <div>
+        <label for="firstname" color="green">Firstname:</label>
+        <input type="text" id="firstname" value="{{ firstname }}" name="firstname">
+    </div>
+    <div>
+        <label for="phone" color="green">Phone:</label>
+        <input type="text" id="phone" value="{{ phone }}" name="phone">
+    </div>
+    <button type="submit">Save</button>
+</form>
+    <a href="{% url 'list_users' %}">Exit</a>
+
+</body>
+</html>
