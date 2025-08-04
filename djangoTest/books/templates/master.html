@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}{% endblock %}</title>
+</head>
+<style>
+  a {
+  color: green;
+  }
+  table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  }
+  th {
+  text-align: left;
+  }
+  table {
+  border-spacing: 5px;
+}
+  .mine_menu {
+  font-size: 24px;
+  margin: 10px;
+  color: yellow;
+  }
+</style>
+<body>
+<a class="mine_menu" href="/">HOME</a>
+<a class="mine_menu" href="{% url 'books' %}">Список книг</a>
+<a class="mine_menu" href="{% url 'readers' %}">Список читачів</a>
+
+{% block content %}
+
+{% endblock %}
+
+</body>
+</html>

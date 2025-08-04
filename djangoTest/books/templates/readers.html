@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<style>
+  table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  }
+  th {
+  text-align: left;
+  }
+  table {
+  border-spacing: 5px;
+}
+</style>
+<body>
+
+<h1>Readers from DataBase</h1>
+<p>{{ request }}</p>
+
+<table style="width:50%">
+  <tr color="green">
+    <th>ID</th>
+    <th>First name</th>
+<!--    <th colspan="2">Last name</th>-->
+    <th>Last name</th>
+    <th>Email</th>
+  </tr>
+    {% for reader in readers %}
+  <tr>
+    <td>{{ reader.id }}</td>
+    <td>{{ reader.firstname }}</td>
+    <td>{{ reader.lastname}}</td>
+    <td>{{ reader.email}}</td>
+  </tr>
+  {% endfor %}
+
+<!--<a type="button" href='' id="button-next">Продовжити</a>-->
+
+</body>
+</html>

@@ -1,21 +1,12 @@
-<!DOCTYPE html>
-<html>
-<style>
-  a {
-  color: green;
-  }
-  table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-  }
-  th {
-  text-align: left;
-  }
-  table {
-  border-spacing: 5px;
-}
-</style>
-<body>
+{% extends "master.html" %}
+
+{% block title %}
+  List of books
+{% endblock %}
+
+
+
+{% block content %}
 
 <h1>Books from DataBase</h1>
 <p></p>
@@ -49,5 +40,4 @@
 </table>
 <!--<a type="button" href='' id="button-next">Продовжити</a>-->
 
-</body>
-</html>
+{% endblock %}

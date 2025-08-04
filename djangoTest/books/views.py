@@ -128,15 +128,26 @@ def book_detail(request, pk):
 
 
 def book_by_id(request, id):
-    template = loader.get_template('books.html')
-
+    template = loader.get_template('book_detail.html')
     book_db = Book.objects.filter(id=id).values()
+    # book_db = Book.objects.get(id=id)
 
     context = {
-        'message': f'Книга з id: {id}' if len(book_db) else 'Дані відсутні',
-        'books': book_db
+        'message': f'Книга з id: {id}' if book_db else 'Дані відсутні',
+        # 'book': {
+        #     'book_id': book_db.book_id,
+        #     'title': book_db.title,
+        #     'author': book_db.author,
+        #     'year': book_db.year,
+        #     'e-book': book_db.ebook,
+        #     'file-name': book_db.filename,
+        #     'genre': book_db.genre
+        # }
+        'book': book_db[0]
     }
     return HttpResponse(template.render(context, request))
+
+
 
 
 def book_by_genre(request, genre):
