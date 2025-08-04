@@ -1,5 +1,10 @@
-<!DOCTYPE html>
-<html>
+{% extends "master.html" %}
+
+{% block title %}
+  Book {{ book.title }}
+{% endblock %}
+
+
 <style>
   table, th, td {
   border: 1px solid black;
@@ -12,7 +17,7 @@
   border-spacing: 5px;
 }
 </style>
-<body>
+{% block content %}
 
 <h1>Readers from DataBase</h1>
 <p>{{ request }}</p>
@@ -33,8 +38,6 @@
     <td>{{ reader.email}}</td>
   </tr>
   {% endfor %}
+</table>
 
-<!--<a type="button" href='' id="button-next">Продовжити</a>-->
-
-</body>
-</html>
+{% endblock %}
