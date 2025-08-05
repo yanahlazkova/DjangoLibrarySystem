@@ -14,26 +14,65 @@ from books.models import Reader, Book
 #     template = loader.get_template('add_books.html')
 #     return HttpResponse(template.render())
 
+def add_reader(request):
+    if request.method == 'POST':
+        new_reader = Reader(
+            firstname=request.POST.get('firstname'),
+            lastname=request.POST.get('lastname'),
+            email=request.POST.get('email'),
+            # phone=request.POST.get('phone')
+            )
+        new_reader.save()
+        reader = {
+            'id': new_reader.id,
+            'firstname': new_reader.firstname,
+            'lastname': new_reader.lastname,
+            'email': new_reader.email,
+            # 'phone': new_reader.phone,
+        }
+        context = {
+            'title': f'Читач id: {new_reader.id}',
+            'reader': reader,
+        }
 
-def add_reader_to_db(request):
+        return render(request, 'new_reader.html', context=context)
+
+
+def reader_id(request, id):
+    reader_id = Reader.objects.get(id=id)
+    reader = {
+        'id': reader_id.id,
+        'firstname': reader_id.firstname,
+        'lastname': reader_id.lastname,
+        'email': reader_id.email,
+        # 'phone': new_reader.phone,
+    }
+    context = {
+        'title': f'Читач id: {id}',
+        'reader': reader,
+    }
+
+    return render(request, 'new_reader.html', context=context)
+
+
+def new_reader(request):
     fake = Faker(['uk_UA'])
-    readers = []
-    for _ in range(3):
-        reader = Reader(
-            firstname=fake.first_name(),
-            lastname=fake.last_name(),
-            email=fake.email(domain='ukr.net')
-        )
-        reader.save()
-    template = loader.get_template('readers.html')
+    reader = {
+        'firstname': fake.first_name(),
+        'lastname': fake.last_name(),
+        'email': fake.email(domain='ukr.net'),
+        # 'phone': fake.phone_number(),
+    }
 
-    readers_db = Reader.objects.all().values()
+    template = loader.get_template('new_reader.html')
 
     context = {
-        'readers': readers_db
+        'title': 'New reader..',
+        'reader': reader
     }
 
     return HttpResponse(template.render(context, request))
+
 
 
 def change_email_reader():

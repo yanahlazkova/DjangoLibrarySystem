@@ -6,6 +6,7 @@
 
 
 <style>
+
   table, th, td {
   border: 1px solid black;
   border-collapse: collapse;
@@ -20,7 +21,10 @@
 {% block content %}
 
 <h1>Readers from DataBase</h1>
+
 <p>{{ request }}</p>
+
+<a class="add-button" href="{% url 'new_reader' %}">Add new reader</a>
 
 <table style="width:50%">
   <tr color="green">
