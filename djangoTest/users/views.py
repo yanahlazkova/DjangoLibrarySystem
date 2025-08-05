@@ -139,7 +139,7 @@ def user_info(request, id):
         return render(request, 'user_info.html', context)
 
 
-def list_users(request):
+def users(request):
     if not request.GET:
         users_db = User.objects.all().values()
 
@@ -161,5 +161,5 @@ def dell_users(request):
     users = User.objects.all()
     for user in users:
         user.delete()
-    list_users(request)
+    users(request)
     return HttpResponse('Дані видалені...')

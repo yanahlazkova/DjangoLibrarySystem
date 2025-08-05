@@ -2,40 +2,66 @@
 <html>
 <head>
   <title>{% block title %}{% endblock %}</title>
+  <style>
+    a {
+    color: green;
+    }
+    table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    }
+    th {
+    text-align: left;
+    }
+    table {
+    border-spacing: 5px;
+  }
+    .mine_menu {
+    font-size: 24px;
+    margin: 10px;
+    color: yellow;
+    }
+    .gray {
+    background-color: gray;
+    }
+    .pink {
+    background-color: pink;
+    }
+    .message-error {
+    color: red;
+    }
+    ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  }
+
+  li {
+    float: left;
+  }
+
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+  }
+
+  li a:hover {
+    background-color: #111;
+  }
+  </style>
 </head>
-<style>
-  a {
-  color: green;
-  }
-  table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-  }
-  th {
-  text-align: left;
-  }
-  table {
-  border-spacing: 5px;
-}
-  .mine_menu {
-  font-size: 24px;
-  margin: 10px;
-  color: yellow;
-  }
-  .gray {
-  background-color: gray;
-  }
-  .pink {
-  background-color: pink;
-  }
-  .message-error {
-  color: red;
-  }
-</style>
 <body>
-<a class="mine_menu" href="/">HOME</a>
-<a class="mine_menu" href="{% url 'books' %}">Список книг</a>
-<a class="mine_menu" href="{% url 'readers' %}">Список читачів</a>
+<ul>
+  <li><a href="/">Home</a></li>
+  <li><a href="{% url 'books' %}">Books</a></li>.
+  <li><a href="{% url 'readers' %}">Readers</a></li>
+  <li><a href="{% url 'users' %}">Users</a></li>
+</ul>
 
 {% block content %}
 
