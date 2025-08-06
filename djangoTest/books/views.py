@@ -9,12 +9,17 @@ from faker import Faker
 
 from books.models import Reader, Book
 
+fake = Faker(['uk_UA'])
 
-# def add_books(request):
-#     template = loader.get_template('add_books.html')
-#     return HttpResponse(template.render())
 
-def add_reader(request):
+"""Методи читання (відображення) даних
+    new - дані готові до збереження але ще не додані у БД,
+    edit - дані з БД для редагування,
+    read - дані з БД тільки для читання (не можливо змінити)
+"""
+
+
+def reader_data(request, id=None):
     if request.method == 'POST':
         new_reader = Reader(
             firstname=request.POST.get('firstname'),
@@ -32,31 +37,32 @@ def add_reader(request):
         }
         context = {
             'title': f'Читач id: {new_reader.id}',
+            'method_read': 'edit',
             'reader': reader,
         }
 
         return render(request, 'new_reader.html', context=context)
+    elif request.method == 'GET':
+        reader_id = Reader.objects.get(id=id)
+        reader = {
+            'id': reader_id.id,
+            'firstname': reader_id.firstname,
+            'lastname': reader_id.lastname,
+            'email': reader_id.email,
+            # 'phone': new_reader.phone,
+        }
+        context = {
+            'title': f'Читач id: {id} Метод {request.method}',
+            'method_read': 'read',
+            'reader': reader,
+        }
 
-
-def reader_id(request, id):
-    reader_id = Reader.objects.get(id=id)
-    reader = {
-        'id': reader_id.id,
-        'firstname': reader_id.firstname,
-        'lastname': reader_id.lastname,
-        'email': reader_id.email,
-        # 'phone': new_reader.phone,
-    }
-    context = {
-        'title': f'Читач id: {id}',
-        'reader': reader,
-    }
-
-    return render(request, 'new_reader.html', context=context)
+        return render(request, 'new_reader.html', context=context)
+        # return HttpResponse(f'function reader_data, method GET (id={id})')
 
 
 def new_reader(request):
-    fake = Faker(['uk_UA'])
+    """ Визивається коли вводяться перші дані реєстрації читача"""
     reader = {
         'firstname': fake.first_name(),
         'lastname': fake.last_name(),
@@ -67,20 +73,56 @@ def new_reader(request):
     template = loader.get_template('new_reader.html')
 
     context = {
-        'title': 'New reader..',
+        'title': 'Реєстрація нового читача',
+        'method_read': 'new',
         'reader': reader
     }
 
     return HttpResponse(template.render(context, request))
 
 
+def reader_edit(request, id):
+    if request.method != 'POST':
+        reader_db = Reader.objects.get(id=id)
+        reader = {
+            'id': id,
+            'firstname': reader_db.firstname,
+            'lastname': reader_db.lastname,
+            'email': reader_db.email,
+            # 'phone': reader_db.phone,
+        }
+        if reader_db.firstname == '':
+            reader['firstname'] = fake.first_name()
+            # reader_db.save()
+        if reader_db.lastname == '':
+            reader['lastname'] = fake.last_name()
+            # reader_db.save()
+        # if reader_db['phone'] == '':
+        #     reader['phone'] = fake.phone_number()
+        if reader_db.email == '':
+            reader['email'] = fake.email()
+            # reader_db.save()
 
-def change_email_reader():
-    fake = Faker()
-    readers = Reader.objects.all()
-    for reader in readers:
-        reader.email = fake.email()
-        reader.save()
+        context = {
+            'title': f'Редагування читача з id: {id}',
+            'method_read': 'edit',
+            'reader': reader
+        }
+
+        return render(request, 'new_reader.html', context)
+    elif request.method == 'POST':
+        message = change_reader(request)
+        return HttpResponse(f'Method {message}')
+
+
+def change_reader(request):
+    message = 'function change_reader'
+    return message
+    # if request.method == 'POST':
+    # if request.method == 'GET':
+    #     return HttpResponse('Method GET')
+    # else:
+    #     return HttpResponse('Another method')
 
 
 def readers_all(request):

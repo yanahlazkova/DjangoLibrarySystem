@@ -17,7 +17,7 @@
 
   {% for key, value in book.items %}
     <tr>
-      <td style="color: lightblue; width: 80px">{{ key }}:</td>
+      <td style="color: lightblue; width: 80px">{{ key }}:<span style="color:red">*</span></td>
       <td style="font-size: 20px">{{ value }}</td>
     </tr>
   {% empty %}

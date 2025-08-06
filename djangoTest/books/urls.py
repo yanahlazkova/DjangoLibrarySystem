@@ -13,6 +13,8 @@ urlpatterns = [
     path('del-books/', views.del_books_all, name='del_books'),
     path('add/reader/', views.new_reader, name='new_reader'),
     path('readers/', views.readers_all, name='readers'),
-    path('reader/', views.add_reader, name='add_reader'),
-    path('readers/<int:id>', views.reader_id, name='reader_id'),
+    path('reader/', views.reader_data, name='add_reader'),
+    path('reader/edit/<int:id>', views.reader_edit, name='reader_edit'),
+    path('readers/<int:id>', views.reader_data, name='reader_id'),
+    # path('reader/edit/<int:id>', views.change_reader, name='change_reader'),
 ]

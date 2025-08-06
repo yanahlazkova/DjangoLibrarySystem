@@ -40,6 +40,7 @@
     <td>{{ reader.firstname }}</td>
     <td>{{ reader.lastname}}</td>
     <td>{{ reader.email}}</td>
+    <td><a href="{% url 'reader_edit' reader.id %}">edit</a></td>
   </tr>
   {% endfor %}
 </table>
