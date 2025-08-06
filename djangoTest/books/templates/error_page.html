@@ -1,0 +1,11 @@
+{% extends "page_info.html" %}
+
+{% block title %}
+    Помилка
+{% endblock %}
+{% block content %}
+    <h1>Виникла помилка</h1>
+    <p style="color:red">{{ error_message }}</p>
+    <a class="data-save" href="{% url 'readers' %}">Повернутися</a>
+
+{% endblock %}
