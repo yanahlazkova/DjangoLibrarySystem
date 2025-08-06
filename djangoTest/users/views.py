@@ -5,6 +5,8 @@ from faker import Faker
 
 from users.models import User
 
+from books.models import Reader
+
 fake = Faker()
 
 
@@ -52,14 +54,15 @@ def new_user(request, id=None):
         }
         # зберігаємо нового користувача у БД
         user_db = add_user_to_db(new_user)
+        new_user['id'] = user_db.id
 
-        context = {
-            'id': user_db.id,
-            'login': login,
-            'email': email,
-            'password': password,
-        }
-        return render(request, 'new_user.html', context)
+        reader_db = Reader.objects.get(email=email)
+        if reader_db:
+            new_user['firstname'] = reader_db.firstname
+            new_user['lastname'] = reader_db.lastname
+            new_user['phone'] = reader_db.phone
+
+        return render(request, 'new_user.html', context=new_user)
 
     else:
         user_db = User.objects.get(id=id)
@@ -136,7 +139,7 @@ def user_info(request, id):
         return render(request, 'user_info.html', context)
 
 
-def list_users(request):
+def users(request):
     if not request.GET:
         users_db = User.objects.all().values()
 
@@ -158,5 +161,5 @@ def dell_users(request):
     users = User.objects.all()
     for user in users:
         user.delete()
-    list_users(request)
+    users(request)
     return HttpResponse('Дані видалені...')

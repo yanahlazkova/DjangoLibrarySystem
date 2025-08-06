@@ -9,39 +9,143 @@ from faker import Faker
 
 from books.models import Reader, Book
 
-
-# def add_books(request):
-#     template = loader.get_template('add_books.html')
-#     return HttpResponse(template.render())
+fake = Faker(['uk_UA'])
 
 
-def add_reader_to_db(request):
-    fake = Faker(['uk_UA'])
-    readers = []
-    for _ in range(3):
-        reader = Reader(
-            firstname=fake.first_name(),
-            lastname=fake.last_name(),
-            email=fake.email(domain='ukr.net')
-        )
-        reader.save()
-    template = loader.get_template('readers.html')
+"""Методи читання (відображення) даних
+    new - дані готові до збереження але ще не додані у БД,
+    edit - дані з БД для редагування,
+    read - дані з БД тільки для читання (не можливо змінити)
+"""
 
-    readers_db = Reader.objects.all().values()
+
+def reader_data(request, id=None):
+    """ Вивід даних читача з БД """
+    if request.method == 'POST':
+        """ якщо дані ще не збережені """
+        new_reader = Reader(
+            firstname=request.POST.get('firstname'),
+            lastname=request.POST.get('lastname'),
+            email=request.POST.get('email'),
+            # phone=request.POST.get('phone')
+            )
+        new_reader.save()
+
+        reader = {
+            'id': new_reader.id,
+            'firstname': new_reader.firstname,
+            'lastname': new_reader.lastname,
+            'email': new_reader.email,
+            # 'phone': new_reader.phone,
+        }
+        context = {
+            'title': f'Читач id: {new_reader.id}',
+            'method_read': 'edit',
+            'reader': reader,
+        }
+
+        return render(request, 'new_reader.html', context=context)
+    elif request.method == 'GET':
+        try:
+            reader_db = Reader.objects.get(id=id)
+
+            reader = {
+                'id': reader_db.id,
+                'firstname': reader_db.firstname,
+                'lastname': reader_db.lastname,
+                'email': reader_db.email,
+                # 'phone': reader_db.phone,
+            }
+            context = {
+                'title': f'Читач id: {id} Метод {request.method}',
+                'method_read': 'read',
+                'reader': reader,
+            }
+
+            return render(request, 'new_reader.html', context=context)
+
+        except Reader.DoesNotExist:
+            my_message = "Читача не знайдено."
+            return render(request, 'error_page.html', {'error_message': my_message})
+        except Reader.MultipleObjectsReturned:
+            my_message = f'Знайдено декілька читачів з ID {id}. Це помилка в даних.'
+            return render(request, 'error_page.html', {'error_message': my_message})
+
+        # return HttpResponse(f'function reader_data, method GET (id={reader})')
+
+
+def new_reader(request):
+    """ Визивається коли вводяться перші дані реєстрації читача"""
+    reader = {
+        'firstname': fake.first_name(),
+        'lastname': fake.last_name(),
+        'email': fake.email(domain='ukr.net'),
+        # 'phone': fake.phone_number(),
+    }
+
+    template = loader.get_template('new_reader.html')
 
     context = {
-        'readers': readers_db
+        'title': 'Реєстрація нового читача',
+        'method_read': 'new',
+        'reader': reader
     }
 
     return HttpResponse(template.render(context, request))
 
 
-def change_email_reader():
-    fake = Faker()
-    readers = Reader.objects.all()
-    for reader in readers:
-        reader.email = fake.email()
-        reader.save()
+def reader_edit(request, id):
+    try:
+        reader_obj = Reader.objects.get(id=id)
+        reader = {
+            'id': id,
+            'firstname': reader_obj.firstname,
+            'lastname': reader_obj.lastname,
+            'email': reader_obj.email,
+            # 'phone': reader_db.phone,
+        }
+        if request.method == 'GET':
+
+            if reader_obj.firstname == '':
+                reader['firstname'] = fake.first_name()
+            if reader_obj.lastname == '':
+                reader['lastname'] = fake.last_name()
+            # if reader_db['phone'] == '':
+            #     reader['phone'] = fake.phone_number()
+            if reader_obj.email == '':
+                reader['email'] = fake.email()
+
+            context = {
+                'title': f'Редагування читача з id: {id}',
+                'method_read': 'edit',
+                'reader': reader
+            }
+
+            return render(request, 'new_reader.html', context)
+
+        elif request.method == 'POST':
+            reader_obj.firstname = request.POST.get('firstname')
+            reader_obj.lastname = request.POST.get('lastname')
+            reader_obj.email = request.POST.get('email')
+            reader_obj.save()
+            context = {
+                'title': f'Збереження даних читача з id: {id}',
+                'method_read': 'read',
+                'reader': {
+                    'id': id,
+                    'firstname': reader_obj.firstname,
+                    'lastname': reader_obj.lastname,
+                    'email': reader_obj.email,
+                    # 'phone': reader_db.phone,
+                }
+            }
+            return render(request, 'new_reader.html', context)
+    except Reader.DoesNotExist:
+        my_message = "Читача не знайдено."
+        return render(request, 'error_page.html', {'error_message': my_message})
+    except Reader.MultipleObjectsReturned:
+        my_message = f'Знайдено декілька читачів з ID {id}. Це помилка в даних.'
+        return render(request, 'error_page.html', {'error_message': my_message})
 
 
 def readers_all(request):
@@ -128,15 +232,26 @@ def book_detail(request, pk):
 
 
 def book_by_id(request, id):
-    template = loader.get_template('books.html')
-
+    template = loader.get_template('book_detail.html')
     book_db = Book.objects.filter(id=id).values()
+    # book_db = Book.objects.get(id=id)
 
     context = {
-        'message': f'Книга з id: {id}' if len(book_db) else 'Дані відсутні',
-        'books': book_db
+        'message': f'Книга з id: {id}',
+        # 'book': {
+        #     'book_id': book_db.book_id,
+        #     'title': book_db.title,
+        #     'author': book_db.author,
+        #     'year': book_db.year,
+        #     'e-book': book_db.ebook,
+        #     'file-name': book_db.filename,
+        #     'genre': book_db.genre
+        # }
+        'book': book_db[0]
     }
     return HttpResponse(template.render(context, request))
+
+
 
 
 def book_by_genre(request, genre):

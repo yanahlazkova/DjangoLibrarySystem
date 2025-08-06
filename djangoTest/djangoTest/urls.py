@@ -20,11 +20,10 @@ from django.urls import include, path
 
 urlpatterns = [
     path('', include('books.urls')),
-    # path('books/', include('books.urls')),
-    # path('add/', include('books.urls')),
 
+    path('', include('users.urls')),
     path('users/', include('users.urls')),
-    # path('reg/', include('users.urls')),
+
     path('', include('day_and_time.urls')),
     path('day/', include('day_and_time.urls')),
     path('day/', include('day_and_time.urls')),

@@ -1,0 +1,76 @@
+{% extends "page_info.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+{% if method_read == 'new' %}
+<form action="{% url 'add_reader' %}" method="post">
+    <p>Method EDIT</p>
+    {% elif method_read == 'read' %}
+<form action="{% url 'reader_id' reader.id %}" method="get">
+    {% elif method_read == 'edit' %}
+<form action="{% url 'reader_edit' reader.id %}" method="post">
+    <p>Method ADD</p>
+
+{% endif %}
+    {% csrf_token %}
+    <div>
+    {% if method_read == 'edit' %}
+        <input type="hidden" value="{{ reader.id }}" name="id">
+    {% endif %}
+        <input type="hidden" name="firstname">
+        <input type="hidden" name="lastname">
+        <input type="hidden" name="email">
+    </div>
+    <table style="width:50%">
+    {% for key, value in reader.items %}
+
+        {% if key != 'id' %}
+    <tr>
+        <td style="color: lightblue; width: 80px">{{ key }}<span style="color:red">*</span>:</td>
+        {% if method_read == 'read' %}
+            <td><input type="text" value="{{ value }}" disabled></td>
+        {% else %}
+            <td><input type="text" value="{{ value }}" name="{{ key }}"></td>
+        {% endif %}
+
+    </tr>
+        {% endif %}
+
+    {% empty %}
+        <p class="message-error">Дані відсутні..</p>
+
+    {% endfor %}
+
+    <tr>
+        <td style="color: lightblue; width: 80px">Phone:</td>
+        <td><input type="text" placeholder="Enter the phone-number" name="phone"></td>
+    </tr>
+
+    {% if method_read != 'new' %}
+    <tr>
+        <td style="color: lightblue; width: 80px">Login:</td>
+        <td><input type="text" placeholder="Enter the login" disabled></td>
+    </tr>
+    <tr>
+        <td style="color: lightblue; width: 80px">Books:</td>
+        <td><input type="text" placeholder="List of the books" name="books"></td>
+    </tr>
+    {% endif %}
+    </table>
+    <ul style="margin-top: 20px; background-color: lightblue">
+        <li><a href="{% url 'readers' %}">Exit</a></li>
+
+        {% if method_read == 'edit' %}
+            <li><button class="data-save" type="submit">Save</button></li>
+        {% elif method_read == 'new' %}
+            <li><button class="data-save" type="submit">Зареєструвати</button></li>
+        {% endif %}
+    </ul>
+
+</form>
+
+{% endblock %}

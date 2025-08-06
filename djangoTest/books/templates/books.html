@@ -1,27 +1,31 @@
-<!DOCTYPE html>
-<html>
-<style>
-  a {
-  color: green;
-  }
-  table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-  }
-  th {
-  text-align: left;
-  }
-  table {
-  border-spacing: 5px;
-}
-</style>
-<body>
+{% extends "master.html" %}
 
-<h1>Books from DataBase</h1>
-<p></p>
-<p><a href="/">HOME</a></p>
-<p></p>
-<p>{{ message }}</p>
+{% block title %}
+  List of books
+{% endblock %}
+
+<style>
+  .gray {
+  background-color: gray;
+  }
+  .pink {
+  background-color: pink;
+  }
+</style>
+
+
+{% block content %}
+
+<h1>{{ message }}</h1>
+
+  <div>
+        <input type="radio" id="green" name="ascending" value="ascending">
+        <label for="green" style="color: green;">За зростанням</label>
+        <input type="radio" id="blue" name="reversed" value="reversed">
+        <label for="blue" style="color: lightblue;">За спаданням</label>
+<!--        <button type="button" id="download_json">Download json-file</button>-->
+    <p></p>
+    </div>
 
 <table style="width:100%">
   <tr color="blue">
@@ -34,8 +38,10 @@
     <th>File of e-book</th>
     <th>Genre</th>
   </tr>
+
     {% for book in books %}
-  <tr>
+<!--    {# % for book in books reversed % #}-->
+  <tr class="{% cycle 'gray' 'pink' %}">
     <td>{{ book.id }}</td>
     <td>{{ book.book_id }}</td>
     <td><a href="{% url 'book_id' book.id %}">{{ book.title }}</a></td>
@@ -49,5 +55,4 @@
 </table>
 <!--<a type="button" href='' id="button-next">Продовжити</a>-->
 
-</body>
-</html>
+{% endblock %}

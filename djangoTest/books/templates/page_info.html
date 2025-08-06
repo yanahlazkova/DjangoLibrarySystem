@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+    .data-save {
+      display: flex;
+      justify-content: center;
+      background-color: lightblue;
+      width: 80px;
+      color: white;
+      padding: 17px;
+      border: none;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #333;
+    }
+
+    li {
+      float: left;
+    }
+
+    li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 16px;
+      text-decoration: none;
+    }
+
+    li a:hover {
+      background-color: #111;
+    }
+    </style>
+</head>
+<body>
+
+<ul>
+  <li><a href="/">Home</a></li>
+  <li><a href="{% url 'books' %}">Books</a></li>.
+  <li><a href="{% url 'readers' %}">Readers</a></li>
+  <li><a href="{% url 'users' %}">Users</a></li>
+</ul>
+
+{% block content %}
+
+{% endblock %}
+
+</body>
+</html>
