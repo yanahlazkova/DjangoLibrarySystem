@@ -96,7 +96,7 @@ def new_reader(request):
 
 def reader_edit(request, id):
     try:
-        reader_obj = Reader.objects.get(id=1)
+        reader_obj = Reader.objects.get(id=id)
         reader = {
             'id': id,
             'firstname': reader_obj.firstname,
@@ -108,15 +108,12 @@ def reader_edit(request, id):
 
             if reader_obj.firstname == '':
                 reader['firstname'] = fake.first_name()
-                # reader_db.save()
             if reader_obj.lastname == '':
                 reader['lastname'] = fake.last_name()
-                # reader_db.save()
             # if reader_db['phone'] == '':
             #     reader['phone'] = fake.phone_number()
             if reader_obj.email == '':
                 reader['email'] = fake.email()
-                # reader_db.save()
 
             context = {
                 'title': f'Редагування читача з id: {id}',
@@ -127,34 +124,28 @@ def reader_edit(request, id):
             return render(request, 'new_reader.html', context)
 
         elif request.method == 'POST':
-            message = ""
-            # try:
-            #     reader_obj = Reader.objects.get(id=1)
-            #
-            # except Reader.DoesNotExist:
-            #     my_message = "Читача не знайдено."
-            #     return render(request, 'error_page.html', {'error_message': my_message})
-            # except Reader.MultipleObjectsReturned:
-            #     my_message = f'Знайдено декілька читачів з ID {id}. Це помилка в даних.'
-            #     return render(request, 'error_page.html', {'error_message': my_message})
-
-            return HttpResponse('method POST')
+            reader_obj.firstname = request.POST.get('firstname')
+            reader_obj.lastname = request.POST.get('lastname')
+            reader_obj.email = request.POST.get('email')
+            reader_obj.save()
+            context = {
+                'title': f'Збереження даних читача з id: {id}',
+                'method_read': 'read',
+                'reader': {
+                    'id': id,
+                    'firstname': reader_obj.firstname,
+                    'lastname': reader_obj.lastname,
+                    'email': reader_obj.email,
+                    # 'phone': reader_db.phone,
+                }
+            }
+            return render(request, 'new_reader.html', context)
     except Reader.DoesNotExist:
         my_message = "Читача не знайдено."
         return render(request, 'error_page.html', {'error_message': my_message})
     except Reader.MultipleObjectsReturned:
         my_message = f'Знайдено декілька читачів з ID {id}. Це помилка в даних.'
         return render(request, 'error_page.html', {'error_message': my_message})
-
-
-def change_reader(request):
-    message = 'function change_reader'
-    return message
-    # if request.method == 'POST':
-    # if request.method == 'GET':
-    #     return HttpResponse('Method GET')
-    # else:
-    #     return HttpResponse('Another method')
 
 
 def readers_all(request):

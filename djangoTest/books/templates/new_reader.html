@@ -21,9 +21,9 @@
     {% if method_read == 'edit' %}
         <input type="hidden" value="{{ reader.id }}" name="id">
     {% endif %}
-        <input type="hidden" value="{{ reader.firstname }}" name="firstname">
-        <input type="hidden" value="{{ reader.lastname }}" name="lastname">
-        <input type="hidden" value="{{ reader.email }}" name="email">
+        <input type="hidden" name="firstname">
+        <input type="hidden" name="lastname">
+        <input type="hidden" name="email">
     </div>
     <table style="width:50%">
     {% for key, value in reader.items %}
@@ -34,7 +34,7 @@
         {% if method_read == 'read' %}
             <td><input type="text" value="{{ value }}" disabled></td>
         {% else %}
-            <td><input type="text" value="{{ value }}"></td>
+            <td><input type="text" value="{{ value }}" name="{{ key }}"></td>
         {% endif %}
 
     </tr>
@@ -47,7 +47,7 @@
 
     <tr>
         <td style="color: lightblue; width: 80px">Phone:</td>
-        <td><input type="text" placeholder="Enter the phone-number"></td>
+        <td><input type="text" placeholder="Enter the phone-number" name="phone"></td>
     </tr>
 
     {% if method_read != 'new' %}
@@ -57,7 +57,7 @@
     </tr>
     <tr>
         <td style="color: lightblue; width: 80px">Books:</td>
-        <td><input type="text" placeholder="List of the books"></td>
+        <td><input type="text" placeholder="List of the books" name="books"></td>
     </tr>
     {% endif %}
     </table>
