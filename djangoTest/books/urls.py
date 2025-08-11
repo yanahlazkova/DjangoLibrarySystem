@@ -16,5 +16,6 @@ urlpatterns = [
     path('reader/', views.reader_data, name='add_reader'),
     path('reader/edit/<int:id>', views.reader_edit, name='reader_edit'),
     path('readers/<int:id>', views.reader_data, name='reader_id'),
+    path('reader/edit/<int:id>', views.update_reader, name='update_reader'),
     # path('error/', views.change_reader, name='error'),
 ]

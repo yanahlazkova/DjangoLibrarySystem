@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<section>
+    {% block menu %}
+        | <a href="/">Home</a> | | <a href="{% url 'list_users' %}">Users</a> |
+    {% endblock menu %}
+</section>
+<section>
+    {% block content %}
+
+    {% endblock content %}
+
+</section>
+
+</body>
+</html>

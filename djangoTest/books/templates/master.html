@@ -3,9 +3,26 @@
 <head>
   <title>{% block title %}{% endblock %}</title>
   <style>
+    .data-save {
+      background-color: lightblue;
+      border: none;
+      text-decoration: none;
+<!--      display: flex;-->
+<!--      justify-content: center;-->
+<!--      width: 80px;-->
+<!--      color: white;-->
+<!--      padding: 17px;-->
+<!--      border-radius: 4px;-->
+    }
+
+    .data-save:hover {
+      background-color: #111;
+    }
+
     a {
       color: green;
     }
+
     .add-button {
       display: block;
       text-align: center;
@@ -24,62 +41,74 @@
       border: 1px solid black;
       border-collapse: collapse;
     }
+
     th {
     text-align: left;
     }
+
     table {
     border-spacing: 5px;
-  }
+    }
+
     .mine_menu {
     font-size: 24px;
     margin: 10px;
     color: yellow;
     }
+
     .gray {
     background-color: gray;
     }
+
     .pink {
     background-color: pink;
     }
+
     .message-error {
     color: red;
     }
+
     ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #333;
-  }
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #333;
+    }
 
-  li {
-    float: left;
-  }
+    li {
+      float: left;
+    }
 
-  li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 16px;
-    text-decoration: none;
-  }
+    li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 16px;
+      text-decoration: none;
+    }
 
-  li a:hover {
-    background-color: #111;
-  }
+    li a:hover {
+      background-color: #111;
+    }
   </style>
 </head>
 <body>
+{% block menu %}
 <ul>
   <li><a href="/">Home</a></li>
   <li><a href="{% url 'books' %}">Books</a></li>.
   <li><a href="{% url 'readers' %}">Readers</a></li>
   <li><a href="{% url 'users' %}">Users</a></li>
 </ul>
+{% endblock menu %}
 
 {% block content %}
 
-{% endblock %}
+{% endblock content %}
+
+<!--{% include "page_info.html" %}-->
+
 
 </body>
 </html>
