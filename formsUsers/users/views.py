@@ -77,6 +77,8 @@ def add_user(request):
         return render(request, 'users.html')
 
 
-def edit_user(request, id_user):
-
-    return render(request, 'users.html')
+def edit_user(request, user_data):
+    context = {
+        'message': user_data
+    }
+    return render(request, 'users.html', context)
