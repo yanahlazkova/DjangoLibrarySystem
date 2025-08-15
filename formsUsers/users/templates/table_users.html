@@ -53,19 +53,27 @@
       <td>{{ user.age|default:"None" }}</td>
       <td>{{ user.email|default:"None" }}</td>
 
-      <td><a href="{% url 'edit_user' user %}">Edit</a></td>
+      <td>
+          <button type="button" onclick="editUser('{{ key }}')">Edit</button>
+      </td>
 
     </tr>
-      {% empty %}
+        {% empty %}
         <p>Немає даних</p>
-      {% endfor %}
-    {% else %}
+        {% endfor %}
+
+        {% else %}
         <p style="color: green;" >Немає ще даних</p>
-    {% endif %}
+        {% endif %}
 </table>
 
-<script src="{% static 'modal_user.js' %}"></script>
-<!--<script src="https://cdn.jsdelivr.net/npm/@faker-js/faker"></script>-->
+{{ users|json_script:"users-data" }}
+
+<script>
+    const allUsers = JSON.parse(document.getElementById('users-data').textContent);
+</script>
+
+<script src="/static/modal_user.js"></script>
 
 </body>
 </html>

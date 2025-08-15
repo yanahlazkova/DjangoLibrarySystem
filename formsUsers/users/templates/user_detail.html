@@ -6,9 +6,11 @@
 <body>
     <h1 style="color: lightblue;">Add new user</h1>
 
-    <form id="formUser" action="{% url 'add_user' %}" method="post">
+    <form id="formUser" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        <table>
+        {{ form.as_table }}
+        </table>
 
     {% comment %}
         {% for field in form %}
@@ -26,9 +28,12 @@
         <p><input type="text" name="email" value="{{ user.email }}" required></p>
     {% endcomment %}
 
+        <div style="margin: 30px">
         <input type="submit" value="Add user">
 
         <button type="button" onclick="autofill()">Autofill</button>
+        </div>
+
     </form>
 
     <script src="{% static 'modal_user.js' %}"></script>
