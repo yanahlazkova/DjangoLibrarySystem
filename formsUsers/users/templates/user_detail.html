@@ -12,26 +12,11 @@
         {{ form.as_table }}
         </table>
 
-    {% comment %}
-        {% for field in form %}
-        <div class="fieldWrapper" style="margin: 10px">
-            {{ field.errors }}
-            {{ field.label_tag }} {{ field }}
-        </div>
-        {% endfor %}
-
-
-
-        <p><input type="text" name="firstname" value="{{ user.firstname }}" required></p>
-        <p><input type="text" name="lastname" value="{{ user.lastname }}" required></p>
-        <p><input type="text" name="age" value="{{ user.age }}" required></p>
-        <p><input type="text" name="email" value="{{ user.email }}" required></p>
-    {% endcomment %}
-
         <div style="margin: 30px">
         <input type="submit" value="Add user">
 
         <button type="button" onclick="autofill()">Autofill</button>
+
         </div>
 
     </form>

@@ -2,7 +2,7 @@ import os
 import uuid
 
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template import loader
 
 from .forms import UserForm
@@ -81,4 +81,4 @@ def edit_user(request, user_id):
     context = {
         'message': user_id
     }
-    return HttpResponse(user_id)
+    return redirect('list_users', context)
