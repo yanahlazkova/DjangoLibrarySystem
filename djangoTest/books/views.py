@@ -1,13 +1,16 @@
 import json
 import os
+from django.db import IntegrityError
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 from faker import Faker
 
 from books.models import Reader, Book
+
+from users.models import User
 
 fake = Faker(['uk_UA'])
 
@@ -22,29 +25,39 @@ fake = Faker(['uk_UA'])
 def reader_data(request, id=None):
     """ Вивід даних читача з БД """
     if request.method == 'POST':
-        """ якщо дані ще не збережені """
-        new_reader = Reader(
-            firstname=request.POST.get('firstname'),
-            lastname=request.POST.get('lastname'),
-            email=request.POST.get('email'),
-            # phone=request.POST.get('phone')
-            )
-        new_reader.save()
+        try:
+            email = request.POST.get('email')
+            reader_obj = Reader.objects.get(email=email)
+            my_message = f'Читач з вказаним email {email} вже існує'
+            return render(request, 'error_page.html', {'error_message': my_message})
+        except Reader.DoesNotExist:
+            # якщо дані ще не збережені, читача не знайдено в БД
+            new_reader = Reader(
+                firstname=request.POST.get('firstname'),
+                lastname=request.POST.get('lastname'),
+                email=request.POST.get('email'),
+                # phone=request.POST.get('phone')
+                )
+            new_reader.save()
 
-        reader = {
-            'id': new_reader.id,
-            'firstname': new_reader.firstname,
-            'lastname': new_reader.lastname,
-            'email': new_reader.email,
-            # 'phone': new_reader.phone,
-        }
-        context = {
-            'title': f'Читач id: {new_reader.id}',
-            'method_read': 'edit',
-            'reader': reader,
-        }
+            reader = {
+                'id': new_reader.id,
+                'firstname': new_reader.firstname,
+                'lastname': new_reader.lastname,
+                'email': new_reader.email,
+                # 'phone': new_reader.phone,
+            }
+            context = {
+                'title': f'Читач id: {new_reader.id}',
+                'method_read': 'edit',
+                'reader': reader,
+            }
 
-        return render(request, 'new_reader.html', context=context)
+            return render(request, 'new_reader.html', context=context)
+        except Reader.MultipleObjectsReturned:
+            my_message = f'Знайдено декілька читачів з ID 1. Це помилка в даних.'
+            return render(request, 'error_page.html', {'error_message': my_message})
+
     elif request.method == 'GET':
         try:
             reader_db = Reader.objects.get(id=id)
@@ -94,16 +107,23 @@ def new_reader(request):
     return HttpResponse(template.render(context, request))
 
 
+def create_dict_reader(reader_obj):
+    return {
+        'id': reader_obj.id,
+        'firstname': reader_obj.firstname,
+        'lastname': reader_obj.lastname,
+        'email': reader_obj.email,
+        'login': reader_obj.user_id,
+        # 'phone': reader_db.phone,
+    }
+
+
 def reader_edit(request, id):
     try:
         reader_obj = Reader.objects.get(id=id)
-        reader = {
-            'id': id,
-            'firstname': reader_obj.firstname,
-            'lastname': reader_obj.lastname,
-            'email': reader_obj.email,
-            # 'phone': reader_db.phone,
-        }
+
+        reader = create_dict_reader(reader_obj)
+
         if request.method == 'GET':
 
             if reader_obj.firstname == '':
@@ -124,28 +144,62 @@ def reader_edit(request, id):
             return render(request, 'new_reader.html', context)
 
         elif request.method == 'POST':
+            email = request.POST.get('email')
+
             reader_obj.firstname = request.POST.get('firstname')
             reader_obj.lastname = request.POST.get('lastname')
-            reader_obj.email = request.POST.get('email')
-            reader_obj.save()
-            context = {
-                'title': f'Збереження даних читача з id: {id}',
-                'method_read': 'read',
-                'reader': {
-                    'id': id,
-                    'firstname': reader_obj.firstname,
-                    'lastname': reader_obj.lastname,
-                    'email': reader_obj.email,
-                    # 'phone': reader_db.phone,
+            reader_obj.email = email
+            try:
+                reader_obj.save()
+                context = {
+                    'title': f'Збереження даних читача з id: {id}',
+                    'method_read': 'read',
+                    'reader': create_dict_reader(reader_obj)
                 }
-            }
-            return render(request, 'new_reader.html', context)
+                return render(request, 'new_reader.html', context)
+            except IntegrityError:
+                my_message = f'Вже існує користувач з email {email}'
+                return render(request, 'error_page.html', {'error_message': my_message})
+
+
     except Reader.DoesNotExist:
         my_message = "Читача не знайдено."
         return render(request, 'error_page.html', {'error_message': my_message})
     except Reader.MultipleObjectsReturned:
         my_message = f'Знайдено декілька читачів з ID {id}. Це помилка в даних.'
         return render(request, 'error_page.html', {'error_message': my_message})
+
+
+def update_reader(request, id):
+    reader_obj = Reader.objects.get(id)
+    context = {
+        'title': f'Оновлення даних читача з id: {id}',
+        'method_read': 'edit',
+        'reader': create_dict_reader(reader_obj)
+    }
+    if reader_obj.user_id:
+        try:
+            user_db = User.objects.get(email=reader_obj.email)
+            reader_obj.user_id = 555  # user_db.id
+            reader_obj.save()
+
+            return render(request, 'new_reader.html', context)
+        except Reader.DoesNotExist:
+            my_message = "Читача не знайдено."
+
+            context = {
+                'title': f'Оновлення даних читача з id: {id}',
+                'method_read': 'edit',
+                'reader': create_dict_reader(reader_obj)
+            }
+            return render(request, 'new_reader.html', context)
+    else:
+        context = {
+            'title': f'Оновлення даних читача з id: {id}',
+            'method_read': 'edit',
+            'reader': create_dict_reader(reader_obj)
+        }
+        return
 
 
 def readers_all(request):
@@ -155,7 +209,6 @@ def readers_all(request):
 
     context = {
         'readers': readers_db,
-        'request': request
     }
     # change_email_reader()
 

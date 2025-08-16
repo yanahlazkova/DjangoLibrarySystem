@@ -1,0 +1,35 @@
+.modal {
+  display: none; /* Приховано за замовчуванням */
+  position: fixed; /* Залишається на місці, коли прокручується сторінка */
+  z-index: 1; /* Розташовується над іншими елементами */
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  overflow: auto; /* Дозволяє прокручувати, якщо контент завеликий */
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+}
+
+/* Контейнер модального вікна */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% зверху і по центру */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* Кнопка закриття */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}

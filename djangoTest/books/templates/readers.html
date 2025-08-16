@@ -36,7 +36,7 @@
   </tr>
     {% for reader in readers %}
   <tr>
-    <td>{{ reader.id }}</td>
+    <td><a href="{% url 'reader_id' reader.id %}">{{ reader.id }}</a></td>
     <td>{{ reader.firstname }}</td>
     <td>{{ reader.lastname}}</td>
     <td>{{ reader.email}}</td>

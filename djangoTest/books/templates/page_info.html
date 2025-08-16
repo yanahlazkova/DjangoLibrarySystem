@@ -41,13 +41,14 @@
     </style>
 </head>
 <body>
-
+{% block mycontent %}
 <ul>
   <li><a href="/">Home</a></li>
   <li><a href="{% url 'books' %}">Books</a></li>.
   <li><a href="{% url 'readers' %}">Readers</a></li>
   <li><a href="{% url 'users' %}">Users</a></li>
 </ul>
+{% endblock mycontent %}
 
 {% block content %}
 

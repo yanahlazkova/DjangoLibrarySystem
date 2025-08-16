@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <link rel="stylesheet" href="{% static 'modal_user.css' %}">
+
+<body>
+    <h1 style="color: lightblue;">Edit user</h1>
+
+    <form id="editUser" method="post">
+        {% csrf_token %}
+        <table>
+        {{ form.as_table }}
+        </table>
+
+        <div style="margin: 30px">
+            <input type="submit" value="Save">
+        </div>
+
+    </form>
+
+    <script src="{% static 'modal_user.js' %}"></script>
+
+
+</body>
+</html>
