@@ -5,6 +5,17 @@
 {% endblock %}
 
 {% block content %}
+{% if messages %}
+    <ul class="messages" style="color=lightblue">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% block menu_users %}
+{% endblock menu_users %}
+
+
 
 <section>
     {% include 'table_users.html' %}

@@ -4,12 +4,10 @@
     <link rel="stylesheet" href="{% static 'modal_user.css' %}">
 
 <body>
-    <h1 style="color: lightblue;">Edit user</h1>
-
-    <form id="editUser" method="post">
+    <form id="editUser" action="edit_user" method="post">
         {% csrf_token %}
         <table>
-        {{ form.as_table }}
+        {{ form_edit_user.as_table }}
         </table>
 
         <div style="margin: 30px">
