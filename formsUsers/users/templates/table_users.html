@@ -15,8 +15,14 @@
       text-align: left;
       }
       table {
-      border-spacing: 5px;
-    }
+        border-spacing: 5px;
+      }
+      .gray {
+      background-color: gray;
+      }
+      .pink {
+      background-color: pink;
+      }
 </style>
 <body>
 <h1>{{ title }}</h1>
@@ -43,7 +49,7 @@
     </tr>
     {% if users %}
       {% for key, user in users.items %}
-    <tr>
+    <tr class="{% cycle 'gray' 'pink' %}">
       <td>{{ key|default:"None" }}</td>
 
       <td>{{ user.firstname|default:"None" }}</td>
