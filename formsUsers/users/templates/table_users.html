@@ -15,26 +15,30 @@
       text-align: left;
       }
       table {
-      border-spacing: 5px;
-    }
+        border-spacing: 5px;
+      }
+      .gray {
+      background-color: gray;
+      }
+      .pink {
+      background-color: pink;
+      }
 </style>
 <body>
 <h1>{{ title }}</h1>
     {% if message %}
         <p>{{ message }}</p>
     {% endif %}
-{% block menu_users %}
-    <div class="table_menu" style="margin: 10px;">
-        <button type="button" onclick="openModal()">Add user</button>
-        <div id="myModal" class="modal">
-          <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            {% include 'user_detail.html' %}
+<div class="table_menu" style="margin: 10px;">
+    <button type="button" onclick="openModal()">Add user</button>
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        {% include 'user_detail.html' %}
 
-          </div>
-        </div>
+      </div>
     </div>
-{% endblock menu_users %}
+</div>
 <table style="width:50%">
     <tr style="color: lightblue;">
         <td>Num</td>
@@ -46,6 +50,7 @@
     </tr>
     {% if users %}
       {% for key, user in users.items %}
+    <tr class="{% cycle 'gray' 'pink' %}">
     <tr>
 <!-- forloop.counter виводить номер строки       -->
       <td style="color: lightblue">{{ forloop.counter }}</td>
@@ -58,6 +63,10 @@
 
       <td>
           <button type="button" onclick="editUser('{{ key }}')">Edit</button>
+
+      </td>
+      <td>
+          <a href="{% url 'delete_user' key %}">Del</a>
 
       </td>
 
@@ -74,6 +83,7 @@
     <div id="editModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeEditModal()">&times;</span>
+            <h4 style="color: lightblue;" id="editUserTitle"></h4>
             {% include 'user_edit.html' %}
         </div>
     </div>

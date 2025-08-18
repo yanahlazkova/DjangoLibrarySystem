@@ -52,6 +52,7 @@ function editUser(userId) {
 
     if (form && user) {
         // Find the input fields by their name and populate them
+        document.getElementById('editUserTitle').textContent  = `Edit user with id: ${userId}`;
         form.querySelector('input[name="id"]').value = userId;
         form.querySelector('input[name="firstname"]').value = user.firstname;
         form.querySelector('input[name="lastname"]').value = user.lastname;

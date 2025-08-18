@@ -1,0 +1,70 @@
+{% extends "master.html" %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<div>
+  <button type="button" id="openModalBtn">Add new user</button>
+  <div id="myCustomModal" class="custom-modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      {% include 'modal.html' %}
+    </div>
+  </div>
+</div>
+<p>{{ message }}</p>
+
+<div>
+
+  <table style="width:50%">
+    <tr style="color: blue">
+      <th>ID</th>
+      <th>Firstname</th>
+      <th>Lastname</th>
+      <th>Login</th>
+      <th>Age</th>
+      <th>Email</th>
+
+    </tr>
+      {% for key, user in users.items %}
+    <tr>
+      <td>{{ key }}</td>
+      <td>{{ key }}</td>
+      <td>{{ key }}</td>
+      <td>{{ key }}</td>
+      <td>{{ key }}</td>
+<!--      <td>{{ user.firstname }}</td>-->
+<!--      <td>{{ user.lastname }}</td>-->
+<!--      <td>{{ user.login }}</td>-->
+<!--      <td>{{ user.age }}</td>-->
+<!--      <td>{{ user.email }}</td>-->
+    </tr>
+      {% endfor %}
+  </table>
+</div>
+<script type="module">
+  // Получаем элементы DOM
+  var modal = document.getElementById("myCustomModal");
+  var btn = document.getElementById("openModalBtn");
+  var span = document.getElementsByClassName("close-btn")[0];
+
+  // Когда пользователь кликает по кнопке, открываем модальное окно
+  btn.onclick = function() {
+    modal.style.display = "block";
+  }
+
+  // Когда пользователь кликает по <span> (x), закрываем модальное окно
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // Когда пользователь кликает в любом месте за пределами модального окна, закрываем его
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+
+
+</script>
+{% endblock content %}

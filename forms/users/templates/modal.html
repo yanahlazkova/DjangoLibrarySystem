@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>New user</title>
+</head>
+<body>
+<h1>New user</h1>
+<section>
+    <form id="formUser" action="{% url 'add_user' %}" method="post">
+    {% csrf_token %}
+        {{ form.as_p }}
+
+        <input class="button" type="submit" value="Add user">
+
+        <button type="button" onclick="autofill()">Autofill</button>
+
+    </form>
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@faker-js/faker@7.6.0/dist/faker.umd.min.js"></script>
+<script type="module">
+    import { faker } from 'https://cdn.jsdelivr.net/npm/@faker-js/faker@8.4.1/+esm';
+
+    // Функція аутозаповненя полів форми фейковими даними
+    window.autofill = function () {
+        const form = document.getElementById('formUser');
+        if (form) {
+            const fakeData = {
+                firstname: faker.person.firstName(),
+                lastname: faker.person.lastName(),
+                login: faker.internet.userName(),
+                age: faker.number.int({ min: 18, max: 90 }),
+                email: faker.internet.email(),
+            };
+
+            form.querySelector('input[name="first_name"]').value = fakeData.firstname;
+            form.querySelector('input[name="last_name"]').value = fakeData.lastname;
+            form.querySelector('input[name="age"]').value = fakeData.age;
+            form.querySelector('input[name="login"]').value = fakeData.login;
+            form.querySelector('input[name="email"]').value = fakeData.email;
+        }
+    }
+</script>
+</body>
+</html>
