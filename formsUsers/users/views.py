@@ -37,6 +37,7 @@ def save_data_to_file(request):
     if not is_save:
         messages.error(request, message=message)
     else:
+        # messages.info(request, message=request.headers)
         messages.info(request, message='Дані збережені в файл')
 
 
@@ -106,22 +107,9 @@ def edit_user(request):
 def delete_user(request, id_user):
     global list_users_file
     del_user = list_users_file[id_user]
-    message = f'''
-    DELETED user:\n
-    ID: {id_user}\n
-    First name: {del_user['firstname']}\n
-    Last name: {del_user['lastname']}\n
-    Age: {del_user['age']}\n
-    E-mail: {del_user['email']}\n
-    '''
+    message = f'DELETED user ID: {id_user}'
     list_users_file.pop(id_user)
 
-    context = {
-        'message': message,
-        'users': list_users_file,
-        'form_new_user': UserForm(),
-        'form_edit_user': EditUserForm(),
-    }
     save_data_to_file(request)
     messages.success(request, message)
     return redirect('list_users')
