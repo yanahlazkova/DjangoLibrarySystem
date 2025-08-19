@@ -41,6 +41,7 @@
 </div>
 <table style="width:50%">
     <tr style="color: lightblue;">
+        <td>Num</td>
         <td>ID</td>
         <td>Firstname</td>
         <td>Lastname</td>
@@ -50,6 +51,9 @@
     {% if users %}
       {% for key, user in users.items %}
     <tr class="{% cycle 'gray' 'pink' %}">
+    <tr>
+<!-- forloop.counter виводить номер строки       -->
+      <td style="color: lightblue">{{ forloop.counter }}</td>
       <td>{{ key|default:"None" }}</td>
 
       <td>{{ user.firstname|default:"None" }}</td>
