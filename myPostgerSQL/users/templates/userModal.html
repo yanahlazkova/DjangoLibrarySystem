@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <link rel="stylesheet" href="{% static 'modal_user.css' %}">
+
+<body>
+    <h1 style="color: lightblue;">Add new user</h1>
+
+    <form id="formUser" action="{% url 'add_user' %}" method="post">
+        {% csrf_token %}
+        <fieldset style="border: 1px solid lightblue">
+            <legend id="edit" style="color: lightblue"></legend>
+                <table>
+                {{ form_new_user.as_table }}
+                </table>
+            </fieldset>
+
+        <div style="margin: 30px">
+        <input type="submit" value="Add user">
+
+        <button type="button" onclick="autofill()">Autofill</button>
+
+        </div>
+
+    </form>
+
+    <script src="{% static 'modal_user.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@faker-js/faker@7.6.0/dist/faker.umd.min.js"></script>
+    <script type="module">
+        import { faker } from 'https://cdn.jsdelivr.net/npm/@faker-js/faker@8.4.1/+esm';
+
+        // Функція аутозаповненя полів форми фейковими даними
+        window.autofill = function () {
+            const form = document.getElementById('formUser');
+            if (form) {
+                const fakeData = {
+                    firstname: faker.person.firstName(),
+                    lastname: faker.person.lastName(),
+                    age: faker.number.int({ min: 18, max: 90 }),
+                    email: faker.internet.email(),
+                    phone: faker.phone.number()
+                };
+
+                form.querySelector('input[name="firstname"]').value = fakeData.firstname;
+                form.querySelector('input[name="lastname"]').value = fakeData.lastname;
+                form.querySelector('input[name="age"]').value = fakeData.age;
+                form.querySelector('input[name="email"]').value = fakeData.email;
+                form.querySelector('input[name="login"]').value = fakeData.firstname;
+                form.querySelector('input[name="password"]').value = fakeData.lastname;
+                form.querySelector('input[name="phone"]').value = fakeData.phone;
+            }
+        }
+    </script>
+
+</body>
+</html>
