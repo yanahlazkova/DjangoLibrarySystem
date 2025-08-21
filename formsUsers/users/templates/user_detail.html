@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{% static 'modal_user.css' %}">
 
 <body>
-    <h1 style="color: lightblue;">Add new user</h1>
+    <h3 style="color: lightblue;">Add new user</h3>
 
     <form id="formUser" action="{% url 'add_user' %}" method="post">
         {% csrf_token %}
