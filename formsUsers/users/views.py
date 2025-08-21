@@ -2,7 +2,7 @@ import os
 import uuid
 
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.shortcuts import render, redirect
 from django.template import loader
 
@@ -73,10 +73,10 @@ def add_user(request):
             user_id = str(uuid.uuid4())
 
             list_users_file[user_id] = {
-                'firstname': form.data.get('firstname'),
-                'lastname': form.data.get('lastname'),
-                'age': form.data.get('age'),
-                'email': form.data.get('email'),
+                'firstname': form.cleaned_data['firstname'],
+                'lastname': form.cleaned_data['lastname'],
+                'age': form.cleaned_data['age'],
+                'email': form.cleaned_data['email'],
             }
 
             save_data_to_file(request)
@@ -84,21 +84,31 @@ def add_user(request):
             return redirect('list_users')
 
 
+def get_user(request, user_id):
+    try:
+        user = list_users_file[user_id]
+
+        return JsonResponse(user)
+    except KeyError:
+        messages.error(request, f'Користувач з id {user_id} не знайдений')
+        return JsonResponse({"error": f"Користувач з id {user_id} не знайдений"}, status=404)
+
+
 def edit_user(request):
     form = EditUserForm(request.POST)
     if form.is_valid():
-        user_id = form.data.get('id')
+        user_id = form.cleaned_data['id']
         user = {
-            'firstname': form.data.get('firstname'),
-            'lastname': form.data.get('lastname'),
-            'age': form.data.get('age'),
-            'email': form.data.get('email'),
-            'language': form.data.get('language')
+            'firstname': form.cleaned_data['firstname'],
+            'lastname': form.cleaned_data['lastname'],
+            'age': form.cleaned_data['age'],
+            'email': form.cleaned_data['email'],
+            'language': form.cleaned_data['language']
         }
         list_users_file[user_id] = user
 
         save_data_to_file(request)
-        messages.success(request, f'Edited user with id {user_id}')
+        messages.success(request, f'Edited user {user_id}')
     else:
         messages.error(request, 'Дані не валідні')
     return redirect('list_users')

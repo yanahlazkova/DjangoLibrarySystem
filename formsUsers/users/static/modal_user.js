@@ -43,32 +43,33 @@ function autofill() {
 var editModal = document.getElementById("editModal");
 
 function editUser(userId) {
-
-    const user = allUsers[userId];
-    const message = `Edit of user ${user.firstname}`
-    console.log(message);
-    // Find the form elements inside the modal
-    const form = document.querySelector('#editModal form');
-
-    if (form && user) {
-        // Find the input fields by their name and populate them
-        document.getElementById('editUserTitle').textContent  = `Edit user with id: ${userId}`;
-        form.querySelector('input[name="id"]').value = userId;
-        form.querySelector('input[name="firstname"]').value = user.firstname;
-        form.querySelector('input[name="lastname"]').value = user.lastname;
-        form.querySelector('input[name="age"]').value = user.age;
-        form.querySelector('input[name="email"]').value = user.email;
-
-        // Change the form action to point to the edit URL
-//        form.action = `edit_user/${userId}`;
-
-        // Open the modal
-        openEditModal();
-    } else {
-        console.error("User data or form not found!");
-    }
+    fetch(`/users/${userId}/`)
+        .then(response => {
+            if (!response.ok) {
+                // Если ответ не OK, обрабатываем ошибку от сервера
+                return response.json().then(errorData => {
+                    throw new Error(errorData.error || "Помилка мережі");
+                });
+            }
+            return response.json();
+        })
+        .then(user => {
+            // знайти форму всередині модалки
+            const form = document.querySelector('#editModal form');
+            if (form) {
+                document.getElementById('editUserTitle').textContent  = `User id: ${userId}`;
+                document.getElementById('edit').textContent = 'Edit user:';
+                form.querySelector('input[name="id"]').value = userId;
+                form.querySelector('input[name="firstname"]').value = user.firstname;
+                form.querySelector('input[name="lastname"]').value = user.lastname;
+                form.querySelector('input[name="age"]').value = user.age;
+                form.querySelector('input[name="email"]').value = user.email;
+                form.querySelector('select[name="language"]').value = user.language;
+            }
+            openEditModal();
+        })
+        .catch(error => alert(error));//console.error("Error fetching user:", error));
 }
-
 
 function openEditModal() {
   editModal.style.display = "block";
