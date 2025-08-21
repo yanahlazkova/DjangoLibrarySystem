@@ -51,3 +51,7 @@ def add_user(request):
             # messages.info(request, message=f'Додано нового користувача з id: {new_user['id']}')
     return redirect('users')
 
+
+def del_user(request, id):
+    return request.method
+

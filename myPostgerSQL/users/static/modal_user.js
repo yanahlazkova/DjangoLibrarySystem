@@ -44,54 +44,29 @@ function autofill() {
 
 
 // Функції модального вікна для редагування даних користувача
-var editModal = document.getElementById("editModal");
+//var editModal = document.getElementById("editModal");
 
-function editUser(userId) {
-    fetch(`/users/${userId}/`)
+function delUser(userId) {
+    console.log('delUser')
+    fetch(`/deleted-user/${userId}/`)
         .then(response => {
-            if (!response.ok) {
-                // Если ответ не OK, обрабатываем ошибку от сервера
-                return response.json().then(errorData => {
-                    throw new Error(errorData.error || "Помилка мережі");
-                });
+//            if (!response.ok) {
+//                // Если ответ не OK, обрабатываем ошибку от сервера
+//                return response.json().then(errorData => {
+//                    throw new Error(errorData.error || "Помилка мережі");
+//                });
+            alert(`Deleted user with id ${userId`)
             }
-            return response.json();
+//            return response.json();
         })
-        .then(user => {
-            // знайти форму всередині модалки
-            const form = document.querySelector('#editModal form');
-            if (form) {
-                document.getElementById('editUserTitle').textContent  = `User id: ${userId}`;
-                document.getElementById('edit').textContent = 'Edit user:';
-                form.querySelector('input[name="id"]').value = userId;
-                form.querySelector('input[name="firstname"]').value = user.firstname;
-                form.querySelector('input[name="lastname"]').value = user.lastname;
-                form.querySelector('input[name="age"]').value = user.age;
-                form.querySelector('input[name="email"]').value = user.email;
-                form.querySelector('input[name="login"]').value = user.login;
-                form.querySelector('input[name="password"]').value = user.password;
-                form.querySelector('input[name="phone"]').value = user.phone;
-            }
-            openEditModal();
-        })
+
         .catch(error => alert(error));//console.error("Error fetching user:", error));
 }
 
-function openEditModal() {
-  editModal.style.display = "block";
-}
-
-function closeEditModal() {
-  editModal.style.display = "none";
-}
-
-// Функции, которые будут вызываться из второго модального окна
-function firstAction() {
-  alert('Выполнено первое действие!');
-  closeSecondModal();
-}
-
-function secondAction() {
-  alert('Выполнено второе действие!');
-  closeSecondModal();
-}
+//function openEditModal() {
+//  editModal.style.display = "block";
+//}
+//
+//function closeEditModal() {
+//  editModal.style.display = "none";
+//}
