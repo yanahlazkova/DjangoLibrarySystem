@@ -1,7 +1,7 @@
 import uuid
 
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
 from .forms import UserForm, EditUserForm
@@ -50,4 +50,22 @@ def add_user(request):
             new_user.save()
             # messages.info(request, message=f'Додано нового користувача з id: {new_user['id']}')
     return redirect('users')
+
+
+def del_user(request, id):
+    if request.method == 'DELETE':
+        try:
+            user = User.objects.get(id=id)  # дістаємо конкретного користувача
+            email = user.email  # запам'ятали, бо після delete() його вже не буде
+            user.delete()
+
+            return JsonResponse({
+                "success": True,
+                "email": email,
+                "message": f"Deleted user {email}"
+            })
+        except User.DoesNotExist:
+            return JsonResponse({"success": False, "error": "User not found"}, status=404)
+
+    return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
 

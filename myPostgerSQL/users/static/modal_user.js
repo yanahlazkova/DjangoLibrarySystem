@@ -42,56 +42,63 @@ function autofill() {
     }
 }
 
+function delUser(userId) {
+    if (!confirm(`Видалити користувача з id '${userId}' ?`)) {
+        return;
+    }
 
+    fetch(`delete_user/${userId}/`, {
+        method: "DELETE",
+        headers: {
+            "X-CSRFToken": getCookie("csrftoken"),
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            alert(`Користувача з email ${result.email} було видалено.`);
+            // опційно: видаляємо рядок із таблиці
+            const tr_id = `row-${userId}`
+            const row = document.querySelector(`tr[id="${tr_id}"]`);
+            if (row) {
+              row.remove();
+              console.log(`Видалено рядок з id ${tr_id}`)
+            }
+            else console.log(`Не знайдено рядок p id ${tr_id}`)
+        } else {
+            alert(`Помилка: ${result.error}`);
+        }
+    })
+    .catch(error => console.error("Помилка fetching user:", error));
+}
+
+
+
+
+
+// функція для отримання CSRF токена з cookie
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 // Функції модального вікна для редагування даних користувача
-var editModal = document.getElementById("editModal");
+//var editModal = document.getElementById("editModal");//function openEditModal() {
 
-function editUser(userId) {
-    fetch(`/users/${userId}/`)
-        .then(response => {
-            if (!response.ok) {
-                // Если ответ не OK, обрабатываем ошибку от сервера
-                return response.json().then(errorData => {
-                    throw new Error(errorData.error || "Помилка мережі");
-                });
-            }
-            return response.json();
-        })
-        .then(user => {
-            // знайти форму всередині модалки
-            const form = document.querySelector('#editModal form');
-            if (form) {
-                document.getElementById('editUserTitle').textContent  = `User id: ${userId}`;
-                document.getElementById('edit').textContent = 'Edit user:';
-                form.querySelector('input[name="id"]').value = userId;
-                form.querySelector('input[name="firstname"]').value = user.firstname;
-                form.querySelector('input[name="lastname"]').value = user.lastname;
-                form.querySelector('input[name="age"]').value = user.age;
-                form.querySelector('input[name="email"]').value = user.email;
-                form.querySelector('input[name="login"]').value = user.login;
-                form.querySelector('input[name="password"]').value = user.password;
-                form.querySelector('input[name="phone"]').value = user.phone;
-            }
-            openEditModal();
-        })
-        .catch(error => alert(error));//console.error("Error fetching user:", error));
-}
 
-function openEditModal() {
-  editModal.style.display = "block";
-}
-
-function closeEditModal() {
-  editModal.style.display = "none";
-}
-
-// Функции, которые будут вызываться из второго модального окна
-function firstAction() {
-  alert('Выполнено первое действие!');
-  closeSecondModal();
-}
-
-function secondAction() {
-  alert('Выполнено второе действие!');
-  closeSecondModal();
-}
+//  editModal.style.display = "block";
+//}
+//
+//function closeEditModal() {
+//  editModal.style.display = "none";
+//}

@@ -63,7 +63,6 @@ def list_users(request):
 
 
 def add_user(request):
-
     if request.method == 'POST':
 
         form = UserForm(request.POST)

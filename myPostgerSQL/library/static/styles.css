@@ -1,5 +1,5 @@
 a {
-  color: green;
+  color: lightblue;
     }
 
 table, th, td {
@@ -40,7 +40,15 @@ li a:hover {
   background-color: #111;
 }
 
-input[type='submit'],
+input[type='submit'], button.delete{
+  background-color: lightblue;
+  margin: 8px;
+  padding: 10px;
+  border: 0px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  }
+
 button {
   background-color: gray;
   border: none;
