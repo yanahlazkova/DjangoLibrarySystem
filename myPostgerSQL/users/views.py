@@ -2,7 +2,7 @@ import uuid
 
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import UserForm, EditUserForm
 from .models import User
@@ -69,3 +69,18 @@ def del_user(request, id):
 
     return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
 
+
+def get_user(request, id_user):
+    if request.method == 'GET':
+        user = get_object_or_404(User, id=id)
+        return JsonResponse({
+            "id": user.id,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "age": user.age,
+            "email": user.email,
+            "login": user.login,
+            "password": user.password,
+            "phone": user.phone,
+        })
+    return JsonResponse({"error": "Invalid request"}, status=400)

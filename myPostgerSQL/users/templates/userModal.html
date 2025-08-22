@@ -4,12 +4,13 @@
     <link rel="stylesheet" href="{% static 'modal_user.css' %}">
 
 <body>
-    <h1 style="color: lightblue;">Add new user</h1>
+    <h1 style="color: lightblue;">{{ title }}</h1>
+    <p>{{ messages }}</p>
 
     <form id="formUser" action="{% url 'add_user' %}" method="post">
         {% csrf_token %}
         <fieldset style="border: 1px solid lightblue">
-            <legend id="edit" style="color: lightblue"></legend>
+            <legend id="legend" style="color: lightblue" ></legend>
                 <table>
                 {{ form_new_user.as_table }}
                 </table>

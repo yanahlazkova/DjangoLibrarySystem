@@ -23,7 +23,7 @@
         </div>
     </div>
     <table style="width:80%">
-        <tr style="color: lightblue;font-size: 24px">
+        <tr style="color: lightblue;font-size: 18px">
             <td>Num</td>
             <td>ID</td>
             <td>Firstname</td>
@@ -44,7 +44,7 @@
           <td>{{ user.firstname }}</td>
           <td>{{ user.lastname }}</td>
           <td>{{ user.age }}</td>
-          <td><a href="">{{ user.email }}</a></td>
+          <td><a href="#" onclick="event.preventDefault(); openEditModal('{{ user.id }}')">{{ user.email }}</a></td>
           <td>{{ user.login }}</td>
           <td>{{ user.password }}</td>
           <td>{{ user.phone }}</td>
@@ -60,7 +60,6 @@
             <p style="color: green;" >Немає ще даних</p>
             {% endif %}
     </table>
-{% comment %}    <!-- Модальне вікно для редагування даних користувача -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeEditModal()">&times;</span>
@@ -69,6 +68,7 @@
         </div>
     </div>
 
+{% comment %}    <!-- Модальне вікно для редагування даних користувача -->
 {{ users|json_script:"users-data" }}
 {% endcomment %}
 

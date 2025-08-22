@@ -15,9 +15,6 @@ window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
-  if (event.target == editModal) {
-    secondModal.style.display = "none";
-  }
 }
 
 
@@ -74,9 +71,6 @@ function delUser(userId) {
 }
 
 
-
-
-
 // функція для отримання CSRF токена з cookie
 function getCookie(name) {
     let cookieValue = null;
@@ -93,9 +87,60 @@ function getCookie(name) {
     return cookieValue;
 }
 // Функції модального вікна для редагування даних користувача
-//var editModal = document.getElementById("editModal");//function openEditModal() {
+//var editModal = document.getElementById("editModal");
 
+function openEditModal(userId) {
+    console.log('Edit modal')
+    getDataUser(userId)
+}
 
+function getDataUser(userId) {
+    fetch(`/get_user/${userId}/`)
+        .then(response => {
+            // Перевіряємо, чи був запит успішним
+            if (!response.ok) {
+                // Якщо відповідь не 200 OK, викидаємо помилку
+                // Щоб отримати більш детальні дані про помилку, парсимо відповідь
+                return response.json().then(errorData => {
+                    throw new Error(errorData.error || "Невідома помилка мережі");
+                });
+            }
+            return response.json();
+        })
+        .then(user => {
+            // Отримали дані користувача у форматі JSON
+            const form = document.querySelector('#editModal form'); // Або будь-яка інша форма, що ви використовуєте для редагування
+
+            if (form && user) {
+                const form = document.getElementById('formUser');
+                document.getElementById('legend').innerText = data.id;
+                if (form) {
+                    form.querySelector('input[name="firstname"]').value = data.firstname;
+                    form.querySelector('input[name="lastname"]').value = data.lastname;
+                    form.querySelector('input[name="age"]').value = data.age;
+                    form.querySelector('input[name="email"]').value = data.email;
+                    form.querySelector('input[name="login"]').value = data.login;
+                    form.querySelector('input[name="password"]').value = data.password;
+                    form.querySelector('input[name="phone"]').value = data.phone;
+                }
+                form.action = `/edit_user/${userId}`;
+                openModal()
+        })
+        .catch(error => alert(`Помилка fetching user, ${error}.`))
+}
+
+// Функции, которые будут вызываться из второго модального окна
+function firstAction() {
+  alert('Выполнено первое действие!');
+  closeSecondModal();
+}
+
+function secondAction() {
+  alert('Выполнено второе действие!');
+  closeSecondModal();
+}
+
+//function openEditModal() {
 //  editModal.style.display = "block";
 //}
 //
