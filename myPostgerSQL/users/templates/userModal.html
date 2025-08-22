@@ -25,9 +25,11 @@
     </form>
 
     <script src="{% static 'modal_user.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@faker-js/faker@7.6.0/dist/faker.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@faker-js/faker@8.0.0/dist/faker.min.js"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/@faker-js/faker@7.6.0/dist/faker.umd.min.js"></script>-->
     <script type="module">
         import { faker } from 'https://cdn.jsdelivr.net/npm/@faker-js/faker@8.4.1/+esm';
+
 
         // Функція аутозаповненя полів форми фейковими даними
         window.autofill = function () {
@@ -38,7 +40,7 @@
                     lastname: faker.person.lastName(),
                     age: faker.number.int({ min: 18, max: 90 }),
                     email: faker.internet.email(),
-                    phone: faker.phone.number()
+                    phone: faker.phone.number('+380 (##) ###-##-##')
                 };
 
                 form.querySelector('input[name="firstname"]').value = fakeData.firstname;

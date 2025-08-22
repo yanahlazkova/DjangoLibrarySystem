@@ -36,7 +36,7 @@
         </tr>
         {% if users %}
           {% for user in users %}
-        <tr class="{% cycle 'gray' 'pink' %}">
+        <tr class="{% cycle 'gray' 'pink' %}" id="row-{{ user.id }}">
           <!-- forloop.counter виводить номер рядка -->
           <td style="color: lightblue">{{ forloop.counter }}</td>
           <td>{{ user.id }}</td>
