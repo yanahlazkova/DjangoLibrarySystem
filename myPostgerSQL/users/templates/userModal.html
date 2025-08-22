@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{% static 'modal_user.css' %}">
 
 <body>
-    <h3 style="color: lightblue;">Add new user</h3>
+    <h1 style="color: lightblue;">Add new user</h1>
 
     <form id="formUser" action="{% url 'add_user' %}" method="post">
         {% csrf_token %}
@@ -38,12 +38,16 @@
                     lastname: faker.person.lastName(),
                     age: faker.number.int({ min: 18, max: 90 }),
                     email: faker.internet.email(),
+                    phone: faker.phone.number()
                 };
 
                 form.querySelector('input[name="firstname"]').value = fakeData.firstname;
                 form.querySelector('input[name="lastname"]').value = fakeData.lastname;
                 form.querySelector('input[name="age"]').value = fakeData.age;
                 form.querySelector('input[name="email"]').value = fakeData.email;
+                form.querySelector('input[name="login"]').value = fakeData.firstname;
+                form.querySelector('input[name="password"]').value = fakeData.lastname;
+                form.querySelector('input[name="phone"]').value = fakeData.phone;
             }
         }
     </script>

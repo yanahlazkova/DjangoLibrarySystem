@@ -29,12 +29,16 @@ function autofill() {
             lastname: faker.person.lastName(),
             age: faker.number.int({ min: 18, max: 90 }),
             email: faker.internet.email(),
+            phone: faker.phone.number({ style: 'international' }),
         };
 
         form.querySelector('input[name="firstname"]').value = fakeData.firstname;
         form.querySelector('input[name="lastname"]').value = fakeData.lastname;
         form.querySelector('input[name="age"]').value = fakeData.age;
         form.querySelector('input[name="email"]').value = fakeData.email;
+        form.querySelector('input[name="login"]').value = fakeData.login;
+        form.querySelector('input[name="password"]').value = fakeData.password;
+        form.querySelector('input[name="phone"]').value = fakeData.phone;
     }
 }
 
@@ -64,7 +68,9 @@ function editUser(userId) {
                 form.querySelector('input[name="lastname"]').value = user.lastname;
                 form.querySelector('input[name="age"]').value = user.age;
                 form.querySelector('input[name="email"]').value = user.email;
-                form.querySelector('select[name="language"]').value = user.language;
+                form.querySelector('input[name="login"]').value = user.login;
+                form.querySelector('input[name="password"]').value = user.password;
+                form.querySelector('input[name="phone"]').value = user.phone;
             }
             openEditModal();
         })

@@ -1,0 +1,99 @@
+a {
+  color: green;
+    }
+
+table, th, td {
+  margin: 10px;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+}
+
+table {
+  border-spacing: 5px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #111;
+}
+
+input[type='submit'],
+button {
+  background-color: gray;
+  border: none;
+  margin: 8px;
+  padding: 10px;
+  border: 0px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  }
+
+button:hover {
+  background-color: lightgray;
+}
+
+/* Для модального вікна */
+.custom-modal {
+  display: none; /* Скрыто по умолчанию */
+  position: fixed; /* Фиксированное позиционирование */
+  z-index: 1005; /* Высокий z-index, чтобы быть поверх других элементов */
+  left: 0;
+  top: 0;
+  width: 100%; /* Занимает всю ширину */
+  height: 100%; /* Занимает всю высоту */
+  overflow: auto; /* Добавляет прокрутку, если содержимое слишком большое */
+  background-color: rgba(0,0,0,0.4); /* Полупрозрачный фон */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* Центрируем */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px; /* Ограничиваем максимальную ширину для лучшего вида */
+}
+
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
