@@ -4,11 +4,13 @@
     <link rel="stylesheet" href="{% static 'modal_user.css' %}">
 
 <body>
-    <h1 style="color: lightblue;">{{ title }}</h1>
+<!--    <h1 style="color: lightblue;">{{ title }}</h1>-->
     <p>{{ messages }}</p>
 
-    <form id="formUser" action="{% url 'add_user' %}" method="post">
+<!--    <form class="formUser" action="{% url 'add_user' %}" method="post">-->
+    <form class="formUser" method="post">
         {% csrf_token %}
+        <input type="hidden" name="user_id" id="userIdField" autocomplete="id_user">
         <fieldset style="border: 1px solid lightblue">
             <legend id="legend" style="color: lightblue" ></legend>
                 <table>
@@ -17,9 +19,9 @@
             </fieldset>
 
         <div style="margin: 30px">
-        <input type="submit" value="Add user">
+            <input type="submit" value="Add user">
 
-        <button type="button" onclick="autofill()">Autofill</button>
+            <button type="button" onclick="autofill()">Autofill</button>
 
         </div>
 
@@ -31,10 +33,9 @@
     <script type="module">
         import { faker } from 'https://cdn.jsdelivr.net/npm/@faker-js/faker@8.4.1/+esm';
 
-
         // Функція аутозаповненя полів форми фейковими даними
         window.autofill = function () {
-            const form = document.getElementById('formUser');
+            const form = document.querySelector(".formUser");
             if (form) {
                 const fakeData = {
                     firstname: faker.person.firstName(),

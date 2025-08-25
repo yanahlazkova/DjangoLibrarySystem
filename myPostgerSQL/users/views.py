@@ -1,6 +1,7 @@
 import uuid
 
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -72,15 +73,38 @@ def del_user(request, id):
 
 def get_user(request, id_user):
     if request.method == 'GET':
-        user = get_object_or_404(User, id=id)
-        return JsonResponse({
-            "id": user.id,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "age": user.age,
-            "email": user.email,
-            "login": user.login,
-            "password": user.password,
-            "phone": user.phone,
-        })
-    return JsonResponse({"error": "Invalid request"}, status=400)
+        try:
+            user = User.objects.get(id=id_user)
+            user_data = {
+                "id": user.id,
+                "firstname": user.firstname,
+                "lastname": user.lastname,
+                "age": user.age,
+                "email": user.email,
+                "login": user.login,
+                "password": user.password,
+                "phone": user.phone,
+            }
+            return JsonResponse({"success": True, "user": user_data})
+        except ObjectDoesNotExist:
+            return JsonResponse({"success": False, "error": "User not found"}, status=404)
+
+    return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
+
+
+def edit_user(request, id_user):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            try:
+                user = User.objects.get(id=id_user)
+                user_data = {
+                    "id": user.id,
+                    "firstname": user.firstname,
+                    "lastname": user.lastname,
+                    "age": user.age,
+                    "email": user.email,
+                    "login": user.login,
+                    "password": user.password,
+                    "phone": user.phone,
+                }
