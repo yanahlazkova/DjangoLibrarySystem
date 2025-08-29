@@ -5,21 +5,40 @@
 
 <body>
 <!--    <h1 style="color: lightblue;">{{ title }}</h1>-->
-    <p>{{ messages }}</p>
+<p>{{ message }}</p>
 
 <!--    <form class="formUser" action="{% url 'add_user' %}" method="post">-->
     <form class="formUser" method="post">
         {% csrf_token %}
-        <input type="hidden" name="user_id" id="userIdField" autocomplete="id_user">
+        <input type="hidden" name="user_id" autocomplete="id_user">
         <fieldset style="border: 1px solid lightblue">
-            <legend id="legend" style="color: lightblue" ></legend>
+            <legend id="new_user" style="color: lightblue" ></legend>
                 <table>
                 {{ form_new_user.as_table }}
                 </table>
             </fieldset>
 
         <div style="margin: 30px">
-            <input type="submit" value="Add user">
+            <input type="submit" name="submit">
+
+            <button type="button" onclick="autofill()">Autofill</button>
+
+        </div>
+
+    </form>
+
+    <form class="formEditUser" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="id" autocomplete="id_user">
+        <fieldset style="border: 1px solid lightblue">
+            <legend id="legend" style="color: lightblue" ></legend>
+                <table>
+                {{ form_edit_user.as_table }}
+                </table>
+            </fieldset>
+
+        <div style="margin: 30px">
+            <input type="submit" name="submit">
 
             <button type="button" onclick="autofill()">Autofill</button>
 
@@ -36,23 +55,28 @@
         // Функція аутозаповненя полів форми фейковими даними
         window.autofill = function () {
             const form = document.querySelector(".formUser");
-            if (form) {
-                const fakeData = {
-                    firstname: faker.person.firstName(),
-                    lastname: faker.person.lastName(),
-                    age: faker.number.int({ min: 18, max: 90 }),
-                    email: faker.internet.email(),
-                    phone: faker.phone.number('+380 (##) ###-##-##')
+            const formEdit = document.querySelector(".formEditUser");
+            console.dir(formEdit.style.display)
+            const fakeData = {
+                firstname: faker.person.firstName(),
+                lastname: faker.person.lastName(),
+                age: faker.number.int({ min: 18, max: 90 }),
+                email: faker.internet.email(),
+                phone: faker.phone.number('+380 (##) ###-##-##')
                 };
 
-                form.querySelector('input[name="firstname"]').value = fakeData.firstname;
-                form.querySelector('input[name="lastname"]').value = fakeData.lastname;
-                form.querySelector('input[name="age"]').value = fakeData.age;
+            if (form.style.display) {
                 form.querySelector('input[name="email"]').value = fakeData.email;
                 form.querySelector('input[name="login"]').value = fakeData.firstname;
                 form.querySelector('input[name="password"]').value = fakeData.lastname;
-                form.querySelector('input[name="phone"]').value = fakeData.phone;
             }
+
+            if (formEdit.style.display == 'block') {
+                formEdit.querySelector('input[name="firstname"]').value = fakeData.firstname;
+                formEdit.querySelector('input[name="lastname"]').value = fakeData.lastname;
+                formEdit.querySelector('input[name="age"]').value = fakeData.age;
+                formEdit.querySelector('input[name="phone"]').value = fakeData.phone;
+                }
         }
     </script>
 
