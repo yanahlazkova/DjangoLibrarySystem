@@ -1,22 +1,18 @@
 from django import forms
+from .models import User
 
 
 class UserForm(forms.Form):
-    firstname = forms.CharField(label="First name")
-    lastname = forms.CharField(label='Last name')
-    age = forms.IntegerField(label='Age')
-    email = forms.EmailField(label='E-mail')
+    # firstname = forms.CharField(label="First name")
+    # lastname = forms.CharField(label='Last name')
+    # age = forms.IntegerField(label='Age')
     login = forms.CharField(label='Login')
+    email = forms.EmailField(label='E-mail')
     password = forms.CharField(label='Password')
-    phone = forms.CharField(label='Phone number')
+    # phone = forms.CharField(label='Phone number')
 
 
-class EditUserForm(forms.Form):
-    id = forms.CharField(label='ID', widget=forms.HiddenInput())
-    firstname = forms.CharField(label="First name")
-    lastname = forms.CharField(label='Last name')
-    age = forms.IntegerField(label='Age')
-    email = forms.EmailField(label='E-mail')
-    login = forms.CharField(label='Login')
-    password = forms.CharField(label='Password')
-    phone = forms.CharField(label='Phone number')
+class EditUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['firstname', 'lastname', 'age', 'email', 'login', 'password', 'phone']

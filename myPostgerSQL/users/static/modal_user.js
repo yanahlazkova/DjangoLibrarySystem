@@ -1,7 +1,32 @@
 var modal = document.getElementById("myModal");
+var form = document.querySelector(".formUser");
+var formEdit = document.querySelector(".formEditUser");
+var formTitle = document.getElementById("userModalTitle");
+var userIdField = document.querySelector('input[name="user_id"]');
+var submitButton = document.querySelector('input[name="submit"]');
 
 // Функція для відкриття модального вікна
-function openModal() {
+function openModal(userId) {
+    form.reset();
+    formEdit.reset();
+  if (userId) { // режим редагування користувача
+    formTitle.textContent = `Редагування користувача з id ${userId}`;
+    formEdit.action = `edit_user/${userId}/`;
+    submitButton.value = "Save";
+    getDataUser(userId);
+    form.style.display = "none";
+    formEdit.style.display = "block";
+    }
+  else {
+    console.log('New user')
+    formTitle.textContent = "Додати нового користувача";
+    form.action = `new_user/`;
+    userIdField.value = '';
+    submitButton.value = "Add user";
+    formEdit.style.display = "none";
+    form.style.display = "block";
+    }
+
   modal.style.display = "block";
 }
 
@@ -15,32 +40,10 @@ window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
-  if (event.target == editModal) {
-    secondModal.style.display = "none";
-  }
 }
 
 
-function autofill() {
-    const form = document.getElementById('formUser');
-    if (form) {
-        const fakeData = {
-            firstname: faker.person.firstName(),
-            lastname: faker.person.lastName(),
-            age: faker.number.int({ min: 18, max: 90 }),
-            email: faker.internet.email(),
-            phone: faker.phone.number({ style: 'international' }),
-        };
 
-        form.querySelector('input[name="firstname"]').value = fakeData.firstname;
-        form.querySelector('input[name="lastname"]').value = fakeData.lastname;
-        form.querySelector('input[name="age"]').value = fakeData.age;
-        form.querySelector('input[name="email"]').value = fakeData.email;
-        form.querySelector('input[name="login"]').value = fakeData.login;
-        form.querySelector('input[name="password"]').value = fakeData.password;
-        form.querySelector('input[name="phone"]').value = fakeData.phone;
-    }
-}
 
 function delUser(userId) {
     if (!confirm(`Видалити користувача з id '${userId}' ?`)) {
@@ -74,9 +77,6 @@ function delUser(userId) {
 }
 
 
-
-
-
 // функція для отримання CSRF токена з cookie
 function getCookie(name) {
     let cookieValue = null;
@@ -93,9 +93,58 @@ function getCookie(name) {
     return cookieValue;
 }
 // Функції модального вікна для редагування даних користувача
-//var editModal = document.getElementById("editModal");//function openEditModal() {
+
+function getDataUser(userId) {
+    console.log('Edit');
+
+    fetch(`get_user/${userId}/`)
+        .then(response => {
+            // Перевіряємо, чи був запит успішним
+            if (!response.ok) {
+                // Якщо відповідь не 200 OK, викидаємо помилку
+                // Щоб отримати більш детальні дані про помилку, парсимо відповідь
+                return response.json().
+                    then(errorData => {
+                        throw new Error(errorData.error || "Невідома помилка мережі");
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success && data.user) {
+                const user = data.user;
+//                formTitle.textContent = "Редагування користувача";
+                userIdField.value = userId;
+//                form.action = `edit_user/${userId}/`;
+                formEdit.querySelector('input[name="id"]').value = user.id;
+                formEdit.querySelector('input[name="firstname"]').value = user.firstname;
+                formEdit.querySelector('input[name="lastname"]').value = user.lastname;
+                formEdit.querySelector('input[name="age"]').value = user.age;
+                formEdit.querySelector('input[name="email"]').value = user.email;
+                formEdit.querySelector('input[name="login"]').value = user.login;
+                formEdit.querySelector('input[name="password"]').value = user.password;
+                formEdit.querySelector('input[name="phone"]').value = user.phone;
+                formEdit.querySelector('input[type="submit"]').value = 'Save';
+            } else {
+                alert(`Помилка: ${data.error}`);
+            }
+        })
+        .catch(error => alert(`Помилка fetching user, ${error}.`));
+    }
 
 
+// Функции, которые будут вызываться из второго модального окна
+function firstAction() {
+  alert('Выполнено первое действие!');
+  closeSecondModal();
+}
+
+function secondAction() {
+  alert('Выполнено второе действие!');
+  closeSecondModal();
+}
+
+//function openEditModal() {
 //  editModal.style.display = "block";
 //}
 //
