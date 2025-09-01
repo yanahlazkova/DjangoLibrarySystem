@@ -15,25 +15,36 @@
 {% endif %}
 
     <div class="search" style="margin: 10px">
-
         <form class="search" action="{% url 'search_firstname' %}" method="get">
           <div class="select">
-            <input type="radio" id="firstname" name="search_by" value="firstname" {% if search_by == "firstname" %} checked {% endif %}>
+            <input type="radio" id="firstname" name="search_by" value="firstname"
+                   data-label="by first name" {% if search_by == "firstname" %} checked {% endif %}>
             <label for="firstname">By firstname</label>
-            <input type="radio" id="lastname" name="search_by" value="lastname" {% if search_by == "lastname" %} checked {% endif %}>
+
+            <input type="radio" id="lastname" name="search_by" value="lastname"
+                   data-label="by last name" {% if search_by == "lastname" %} checked {% endif %}>
             <label for="lastname">By lastname</label>
-            <input type="radio" id="age" name="search_by" value="age" {% if search_by == "age" %} checked {% endif %}>
+
+            <input type="radio" id="age" name="search_by" value="age"
+                   data-label="by age" {% if search_by == "age" %} checked {% endif %}>
             <label for="age">By age</label>
-            <input type="radio" id="email" name="search_by" value="email" {% if search_by == "email" %} checked {% endif %}>
+
+            <input type="radio" id="email" name="search_by" value="email"
+                   data-label="by email" {% if search_by == "email" %} checked {% endif %}>
             <label for="email">By email</label>
-            <input type="radio" id="id" name="search_by" value="id" {% if search_by == "id" %} checked {% endif %}>
-            <label for="id">By id</label>
-            <input type="radio" id="phone" name="search_by" value="phone" {% if search_by == "phone" %} checked {% endif %}>
+
+            <input type="radio" id="id" name="search_by" value="id"
+                   data-label="by ID" {% if search_by == "id" %} checked {% endif %}>
+            <label for="id">By ID</label>
+
+            <input type="radio" id="phone" name="search_by" value="phone"
+                   data-label="by phone" {% if search_by == "phone" %} checked {% endif %}>
             <label for="phone">By phone</label>
           </div>
-          <label for="gsearch">Search users by Firstname:</label>
+
+          <label for="gsearch" id="label_search">Search users by...</label>
           <input type="search" id="gsearch" name="gsearch" placeholder="Enter request">
-          <input type="submit" value="Search by firstname">
+          <input type="submit" value="Search">
         </form>
     </div>
     <div class="table_menu" style="margin: 10px;">
@@ -101,5 +112,32 @@
 
 
 <script src="/static/modal_user.js"></script>
+<script>
+    // Get the main search label element
+    const mainSearchLabel = document.getElementById('label_search');
+
+    // Get all radio buttons with the name "search_by"
+    const searchByRadio = document.querySelectorAll('input[name="search_by"]');
+
+    // A function to update the label's text
+    function updateSearchLabel() {
+        // Find the currently selected radio button
+        const selectedRadio = document.querySelector('input[name="search_by"]:checked');
+
+        // Get the text from the data-label attribute
+        const labelText = selectedRadio ? selectedRadio.getAttribute('data-label') : 'by...';
+
+        // Update the main label's text
+        mainSearchLabel.textContent = `Search users ${labelText}`;
+    }
+
+    // Add an event listener to each radio button
+    searchByRadio.forEach(radio => {
+        radio.addEventListener('change', updateSearchLabel);
+    });
+
+    // Call the function once when the page loads to set the initial text
+    document.addEventListener('DOMContentLoaded', updateSearchLabel);
+</script>
 
 {% endblock content %}
