@@ -1,3 +1,18 @@
+.select label {
+    color: lightblue; /* Цвет по умолчанию */
+}
+
+/* Применяется, когда input выбран */
+.select input:checked + label {
+    color: white; /* Цвет для выбранного label */
+}
+
+/* Дополнительно: можно добавить эффект при наведении или фокусе */
+.select input:hover + label,
+.select input:focus + label {
+    color: #4CAF50; /* Чуть другой оттенок зеленого для интерактивности */
+}
+
 .modal {
   display: none; /* Приховано за замовчуванням */
   position: fixed; /* Залишається на місці, коли прокручується сторінка */
