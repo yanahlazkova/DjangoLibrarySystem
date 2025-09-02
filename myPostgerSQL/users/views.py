@@ -9,6 +9,9 @@ from .forms import UserForm, EditUserForm
 from .models import User
 
 
+new_user_form = UserForm()
+edit_user_form = EditUserForm()
+
 def get_list_users():
     try:
         list_users = User.objects.all().values()
@@ -18,21 +21,42 @@ def get_list_users():
 
 
 def all_users(request):
-    new_user_form = UserForm()
-    edit_user_form = EditUserForm()
-
     if request.method == 'GET':
+        search_by = request.GET.get('search_by')
+        query = request.GET.get('gsearch')
+
         # Отримати список користувачів з БД
-        list_users_file = get_list_users()
+        list_users = get_list_users()
+
+        if search_by and query:
+            # __iexact - регістро-незалежний
+            # __icontains - може містити
+            list_users = []
+            match search_by:
+                case 'firstname':
+                    list_users = User.objects.filter(firstname__icontains=query)
+                case 'lastname':
+                    list_users = User.objects.filter(lastname__icontains=query)
+                case 'age':
+                    list_users = User.objects.filter(age__icontains=query)
+                case 'email':
+                    list_users = User.objects.filter(email__icontains=query)
+                case 'phone':
+                    list_users = User.objects.filter(phone__icontains=query)
+                case 'id':
+                    list_users = User.objects.filter(id__icontains=query)
+
         context = {
             'form_new_user': new_user_form,
             'form_edit_user': edit_user_form,
             'title': 'List users',
-            'users': list_users_file
+            'users': list_users,
+            'search_by': search_by,
         }
 
         return render(request, 'users.html', context)
     # return HttpResponse('List users')
+    return redirect('/')
 
 
 def add_user(request):
@@ -112,3 +136,39 @@ def edit_user(request, id_user):
 
     # якщо GET або POST з помилками, треба відобразити форму
     return render(request, "edit_user.html", {"form": form})
+
+
+def search_firstname(request):
+    if request.method == 'GET':
+        search_by = request.GET.get('search_by')
+        search_word = request.GET.get('gsearch')
+        # __iexact - регістро-незалежний
+        # __icontains - може містити
+        if search_word == '':
+            return redirect('users')
+        list_users = []
+        match search_by:
+            case 'firstname':
+                list_users = User.objects.filter(firstname__icontains=search_word)
+            case 'lastname':
+                list_users = User.objects.filter(lastname__icontains=search_word)
+            case 'age':
+                list_users = User.objects.filter(age__icontains=search_word)
+            case 'email':
+                list_users = User.objects.filter(email__icontains=search_word)
+            case 'phone':
+                list_users = User.objects.filter(phone__icontains=search_word)
+            case 'id':
+                list_users = User.objects.filter(id__icontains=search_word)
+        context = {
+            'form_new_user': new_user_form,
+            'form_edit_user': edit_user_form,
+            'title': 'List users',
+            'search_by': search_by,
+            'users': list_users
+        }
+
+        return render(request, 'users.html', context)
+
+    return redirect('users')
+    #     return HttpResponse(request.GET.get('search_by'))
