@@ -15,36 +15,41 @@
 {% endif %}
 
     <div class="search" style="margin: 10px">
-        <form class="search" action="{% url 'search_firstname' %}" method="get">
-          <div class="select">
-            <input type="radio" id="firstname" name="search_by" value="firstname"
-                   data-label="by first name" {% if search_by == "firstname" %} checked {% endif %}>
-            <label for="firstname">By firstname</label>
+        <form class="search" action="{% url 'users' %}" method="get">
+          <fieldset style="border: 1px solid lightblue">
+            <legend style="color: lightblue" >Search</legend>
+              <div class="select">
+                <input type="radio" id="firstname" name="search_by" value="firstname"
+                       data-label="by first name" {% if search_by == "firstname" %} checked {% endif %}>
+                <label for="firstname">By firstname</label>
 
-            <input type="radio" id="lastname" name="search_by" value="lastname"
-                   data-label="by last name" {% if search_by == "lastname" %} checked {% endif %}>
-            <label for="lastname">By lastname</label>
+                <input type="radio" id="lastname" name="search_by" value="lastname"
+                       data-label="by last name" {% if search_by == "lastname" %} checked {% endif %}>
+                <label for="lastname">By lastname</label>
 
-            <input type="radio" id="age" name="search_by" value="age"
-                   data-label="by age" {% if search_by == "age" %} checked {% endif %}>
-            <label for="age">By age</label>
+                <input type="radio" id="age" name="search_by" value="age"
+                       data-label="by age" {% if search_by == "age" %} checked {% endif %}>
+                <label for="age">By age</label>
 
-            <input type="radio" id="email" name="search_by" value="email"
-                   data-label="by email" {% if search_by == "email" %} checked {% endif %}>
-            <label for="email">By email</label>
+                <input type="radio" id="email" name="search_by" value="email"
+                       data-label="by email" {% if search_by == "email" %} checked {% endif %}>
+                <label for="email">By email</label>
 
-            <input type="radio" id="id" name="search_by" value="id"
-                   data-label="by ID" {% if search_by == "id" %} checked {% endif %}>
-            <label for="id">By ID</label>
+                <input type="radio" id="id" name="search_by" value="id"
+                       data-label="by ID" {% if search_by == "id" %} checked {% endif %}>
+                <label for="id">By ID</label>
 
-            <input type="radio" id="phone" name="search_by" value="phone"
-                   data-label="by phone" {% if search_by == "phone" %} checked {% endif %}>
-            <label for="phone">By phone</label>
-          </div>
+                <input type="radio" id="phone" name="search_by" value="phone"
+                       data-label="by phone" {% if search_by == "phone" %} checked {% endif %}>
+                <label for="phone">By phone</label>
 
-          <label for="gsearch" id="label_search">Search users by...</label>
-          <input type="search" id="gsearch" name="gsearch" placeholder="Enter request">
-          <input type="submit" value="Search">
+                <div>
+                  <label for="gsearch" id="label_search">Search users by...</label>
+                  <input type="search" id="gsearch" name="gsearch" placeholder="Enter request">
+                  <input type="submit" value="Search">
+                </div>
+              </div>
+          </fieldset>
         </form>
     </div>
     <div class="table_menu" style="margin: 10px;">

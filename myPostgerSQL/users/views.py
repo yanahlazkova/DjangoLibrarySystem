@@ -22,14 +22,35 @@ def get_list_users():
 
 def all_users(request):
     if request.method == 'GET':
-        search_by = request.GET.get('search_by', 'firstname')
+        search_by = request.GET.get('search_by')
+        query = request.GET.get('gsearch')
+
         # Отримати список користувачів з БД
-        list_users_file = get_list_users()
+        list_users = get_list_users()
+
+        if search_by and query:
+            # __iexact - регістро-незалежний
+            # __icontains - може містити
+            list_users = []
+            match search_by:
+                case 'firstname':
+                    list_users = User.objects.filter(firstname__icontains=query)
+                case 'lastname':
+                    list_users = User.objects.filter(lastname__icontains=query)
+                case 'age':
+                    list_users = User.objects.filter(age__icontains=query)
+                case 'email':
+                    list_users = User.objects.filter(email__icontains=query)
+                case 'phone':
+                    list_users = User.objects.filter(phone__icontains=query)
+                case 'id':
+                    list_users = User.objects.filter(id__icontains=query)
+
         context = {
             'form_new_user': new_user_form,
             'form_edit_user': edit_user_form,
             'title': 'List users',
-            'users': list_users_file,
+            'users': list_users,
             'search_by': search_by,
         }
 
