@@ -3,13 +3,9 @@ from .models import User
 
 
 class UserForm(forms.Form):
-    # firstname = forms.CharField(label="First name")
-    # lastname = forms.CharField(label='Last name')
-    # age = forms.IntegerField(label='Age')
-    login = forms.CharField(label='Login')
-    email = forms.EmailField(label='E-mail')
-    password = forms.CharField(label='Password')
-    # phone = forms.CharField(label='Phone number')
+    class Meta:
+        model = User
+        fields = ('login', 'email', 'password')
 
 
 class EditUserForm(forms.ModelForm):

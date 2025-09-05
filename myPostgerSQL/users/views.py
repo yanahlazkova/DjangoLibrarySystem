@@ -61,6 +61,11 @@ def all_users(request):
 
 def add_user(request):
     if request.method == 'POST':
+        print()
+        print(dir(request))
+        print()
+        print(request.user)
+
         form = UserForm(request.POST)
         if form.is_valid():
             new_user = User(
