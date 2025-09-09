@@ -22,7 +22,7 @@ function openModal(userId) {
     formTitle.textContent = "Додати нового користувача";
     form.action = `new_user/`;
     userIdField.value = '';
-    submitButton.value = "Add user";
+    submitButton.value = "Додати нового";
     formEdit.style.display = "none";
     form.style.display = "block";
     }
