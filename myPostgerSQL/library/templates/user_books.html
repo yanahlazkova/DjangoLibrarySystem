@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}
+        {{ title }}
+        {% endblock title %}</title>
+    <style>
+    .gray {
+      background-color: gray;
+    }
+    .pink {
+      background-color: pink;
+    }
+
+</style>
+</head>
+<body>
+    <a type="button" href="{% url 'library' %}">Back</a>
+    <p>
+    Reader: <span style="color: lightblue; font-size: 24px;">{{ user.firstname }} {{ user.lastname }}</span>
+    </p>
+    <input type="hidden" name="user_id">
+
+    <p style="color: green;">{{ message }}</p>
+<form action="{% url 'return_books' user.id %}" method="post">
+    {% csrf_token %}
+    <div style="height: 400px; width:70%; overflow: auto; border: 1px solid black; padding: 5px;">
+        <table style="width: 95%">
+          <thead>
+            <tr>
+              <th>N</th>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Year</th>
+              <th>Genre</th>
+              <th>Date received</th>
+              <th>Date returned</th>
+              </tr>
+            </thead>
+              {% if books %}
+            <tbody>
+              {% for book in books %}
+                <tr class="{% cycle 'gray' 'pink' %}" id="row-{{ book.id }}" {% if not book.borrows__date_returned %} style="color: blue;" {% endif %}>
+                  <td style="color: lightblue">{{ forloop.counter }}</td>
+                  <td>{{ book.id }}</td>
+                  <td>{{ book.title }}</td>
+                  <td>{{ book.author }}</td>
+                  <td>{{ book.year }}</td>
+                  <td>{{ book.genre__name }}</td>
+                  <td>{{ book.borrows__date_received }}</td>
+                  <td>{{ book.borrows__date_returned }}</td>
+                  <td><input type="checkbox" name="select_book" value="{{ book.id }}"></td>
+                </tr>
+              {% empty %}
+              <p style="color: green;">No data</p>
+              {% endfor %}
+            </tbody>
+            {% else %}
+            <p style="color: green;">No data</p>
+            {% endif %}
+        </table>
+    </div>
+
+    <button type="submit">Return</button>
+</form>
+
+</body>
+</html>

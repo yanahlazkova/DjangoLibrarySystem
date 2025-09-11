@@ -1,0 +1,104 @@
+{% extends "master.html" %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<!--        <a href="{% url 'deleted_all_genres' %}">Delete all</a>-->
+
+<p>{{ message }}</p>
+{% if messages %}
+    <ul class="messages" style="color=lightblue">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div class="table_menu" style="margin: 10px;">
+        <button type="button" onclick="openModal()">Add book</button>
+        <div id="myModal" class="modal">
+          <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+              <h4 style="color: lightblue;" id="bookModalTitle"></h4>
+
+                {% include 'bookModal.html' %}
+
+
+          </div>
+        </div>
+    </div>
+    <table style="width:80%">
+        <tr style="color: lightblue;font-size: 18px">
+            <td>Num</td>
+            <td>ID</td>
+            <td>Title</td>
+            <td>Author</td>
+            <td>Year</td>
+            <td>Genre</td>
+            <td>Reader</td>
+            <td></td>
+        </tr>
+        {% if books %}
+          {% for book in books %}
+        <tr class="{% cycle 'gray' 'pink' %}" id="row-{{ book.id }}">
+          <!-- forloop.counter виводить номер рядка -->
+          <td style="color: lightblue">{{ forloop.counter }}</td>
+          <td>{{ book.id }}</td>
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.year }}</td>
+          <td>{{ book.genre__name }}</td>
+          <td>{{ book.user_set }}</td>
+          <td>
+<!--              <button type="button" class="delete" onclick="delUser('{{ user.id }}')">Delete</button>-->
+              <button type="button" class="delete">Delete</button>
+          </td>
+        </tr>
+            {% empty %}
+            <p>Немає даних</p>
+            {% endfor %}
+
+            {% else %}
+            <p style="color: green;" >Немає ще даних</p>
+            {% endif %}
+    </table>
+{% comment %}
+
+{{ users|json_script:"users-data" }}
+
+{% endcomment %}
+
+<script src="/static/modal_book.js"></script>
+{% comment %}
+<script>
+    // Get the main search label element
+    const mainSearchLabel = document.getElementById('label_search');
+
+    // Get all radio buttons with the name "search_by"
+    const searchByRadio = document.querySelectorAll('input[name="search_by"]');
+
+    // A function to update the label's text
+    function updateSearchLabel() {
+        // Find the currently selected radio button
+        const selectedRadio = document.querySelector('input[name="search_by"]:checked');
+
+        // Get the text from the data-label attribute
+        const labelText = selectedRadio ? selectedRadio.getAttribute('data-label') : 'by...';
+
+        // Update the main label's text
+        mainSearchLabel.textContent = `Search users ${labelText}`;
+    }
+
+    // Add an event listener to each radio button
+    searchByRadio.forEach(radio => {
+        radio.addEventListener('change', updateSearchLabel);
+    });
+
+    // Call the function once when the page loads to set the initial text
+    document.addEventListener('DOMContentLoaded', updateSearchLabel);
+</script>
+{% endcomment %}
+
+{% endblock content %}

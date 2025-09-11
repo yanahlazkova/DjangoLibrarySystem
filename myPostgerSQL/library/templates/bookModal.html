@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <link rel="stylesheet" href="{% static 'modal_user.css' %}">
+
+<body>
+    <p>{{ message }}</p>
+
+
+    <form id="newGenreForm" action="{% url 'new_genre' %}" method="post">
+        {% csrf_token %}
+        <fieldset style="border: 1px solid lightblue">
+            <legend id="new_genre" style="color: lightblue">Genre:</legend>
+<!--                <a href="{% url 'deleted_all_genres' %}">Delete all</a>-->
+                <label for="id_new_genre">New genre:</label>
+                <input type="text" id="id_new_genre" name="genre" placeholder="Enter the genre..." required>
+                <input type="submit" style="font-size: 16px" value="+">
+        </fieldset>
+    </form>
+
+    <form class="formBook" action="{% url 'add_book' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="book_id" autocomplete="id_book">
+        <fieldset style="border: 1px solid lightblue">
+            <legend id="new_book" style="color: lightblue">Book:</legend>
+            <table>
+                {{ form.as_table }}
+            </table>
+        </fieldset>
+        <div style="margin: 30px">
+            <input type="submit" name="submit">
+
+            <button type="button" id="autofill-btn">Autofill</button>
+        </div>
+    </form>
+
+
+    <script src="{% static 'modal_user.js' %}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const newGenreForm = document.getElementById('newGenreForm');
+        const genreInput = document.getElementById('id_genre');
+
+        newGenreForm.addEventListener('submit', function(event) {
+            // Предотвращаем стандартную отправку формы и перезагрузку страницы
+            event.preventDefault();
+
+            const formData = new FormData(newGenreForm);
+            const csrfToken = formData.get('csrfmiddlewaretoken');
+            const genreName = formData.get('genre');
+
+            fetch(newGenreForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrfToken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Находим выпадающий список жанров в форме книги
+                    const genreSelect = document.querySelector('select[name="genre"]');
+
+                    // Создаем новый элемент <option>
+                    const newOption = document.createElement('option');
+                    newOption.value = data.id;
+                    newOption.textContent = data.name;
+                    newOption.selected = true; // Сразу выбираем новый жанр
+
+                    // Добавляем новый вариант в список
+                    genreSelect.appendChild(newOption);
+
+                    // Очищаем поле ввода нового жанра
+                    genreInput.value = '';
+
+                    alert(data.message); // Выводим сообщение об успехе
+                } else {
+                    alert(data.message); // Выводим сообщение об ошибке
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при добавлении жанра.');
+            });
+        });
+    });
+</script>
+
+<script type="module">
+    import { faker } from 'https://cdn.jsdelivr.net/npm/@faker-js/faker@9.1.0/+esm';
+
+    document.getElementById("autofill-btn").addEventListener("click", () => {
+        const form = document.querySelector(".formBook");
+        const fakeData = {
+            title: faker.book.title(),
+            author: faker.person.lastName(),
+            year: faker.date.between({ from: '1950-01-01', to: Date.now() }).getFullYear(),
+            genre: faker.book.genre(),
+        };
+
+        form.querySelector('input[name="title"]').value = fakeData.title;
+        form.querySelector('input[name="author"]').value = fakeData.author;
+        form.querySelector('input[name="year"]').value = fakeData.year;
+        document.getElementById('id_new_genre').value = fakeData.genre;
+    });
+</script>
+
+
+
+</body>
+</html>
+<!--        form.querySelector('select[name="genre"]').value = fakeData.genre;-->

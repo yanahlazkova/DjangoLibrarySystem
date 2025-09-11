@@ -2,12 +2,16 @@ import uuid
 
 from django.db import models
 
+# from library.models import Book
+
 
 class User(models.Model):
     firstname = models.CharField(max_length=255, null=True)
     lastname = models.CharField(max_length=255, null=True)
     age = models.IntegerField(null=True)
     phone = models.CharField(max_length=30, null=True, unique=True)
+
+    books = models.ManyToManyField('library.Book', through='library.UserBooks')
 
     def __str__(self):
         return f'{self.firstname} {self.lastname} {self.age} {self.phone}'
