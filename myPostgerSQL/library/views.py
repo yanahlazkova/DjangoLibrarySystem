@@ -16,7 +16,16 @@ def main(request):
 def books(request):
     form = BookForm()
     if request.method == 'GET':
-        list_books = Book.objects.all().values('title', 'author', 'year', 'genre__name')
+        list_books = Book.objects.all().values(
+            'id',
+            'title',
+            'author',
+            'year',
+            'genre__name',
+            'borrows__user__id',
+            'borrows__user__firstname',
+            'borrows__user__lastname',
+        ).distinct('id').order_by('id')
         context = {
             'form': form,
             'books': list_books,
@@ -103,14 +112,46 @@ def library(request):
                  .values('id', 'firstname', 'lastname', 'account__email')
                  )
 
-        books = (Book.objects.all().order_by('id')
-                 .values('id', 'title', 'author', 'year', 'genre__name', 'borrows__date_received', 'borrows__date_returned'))
+        list_books_available = (Book.objects.exclude(borrows__date_returned__isnull=True)
+                      .order_by('id').distinct('id')
+                      .values('id',
+                         'title',
+                         'author',
+                         'year',
+                         'genre__name',
+                         'borrows__date_received',
+                         'borrows__date_returned')
+                      )
+        list_books_unavailable = (Book.objects.filter(borrows__date_returned__isnull=True)
+                      .order_by('id')
+                      .values('id',
+                         'title',
+                         'author',
+                         'year',
+                         'genre__name',
+                         'borrows__date_received',
+                         'borrows__date_returned')
+                      )
+        list_books = (UserBooks.objects.all()
+                      .order_by('id')
+                      .values('id',
+                              'user__id',
+                              'user__firstname',
+                              'user__lastname',
+                              'book__title',
+                              'book__author',
+                              'date_received',
+                              'date_returned')
+                      )
+
         # print()
         # print(books[23])
         # print()
         context = {
             'users': users,
-            'books': books,
+            'books': list_books,
+            'books_available': list_books_available,
+            'books_unavailable': list_books_unavailable,
         }
         return render(request, 'library.html', context=context)
     return render(request, 'library.html')
@@ -123,30 +164,35 @@ def receive_books(request):
 
         user_db = get_object_or_404(User, id=select_user_id)
 
+        current_time = datetime.now()
         user_db.books.add(*selected_books_id)
 
-        current_time = datetime.now()
-
+        #
         for book_id in selected_books_id:
-            user_book_entry = UserBooks.objects.get(user=select_user_id, book=book_id, date_received=None)
+            user_book_entry = UserBooks.objects.get(user=select_user_id, book=book_id, date_returned__isnull=True)
             user_book_entry.date_received = current_time
+            # print('!!!user_book_entry', user_book_entry)
             user_book_entry.save()
 
-        list_received_books = user_db.books.all().values(
+        list_received_books = (user_db.books.all().values(
+            'id',
             'title',
             'author',
             'year',
             'genre__name',
             'borrows__date_received',
-            'borrows__date_returned').filter(borrows__date_received=current_time).order_by('id')
+            'borrows__date_returned')
+                               .filter(id__in=selected_books_id, borrows__date_returned__isnull=True)
+                               .order_by('id'))
 
         context = {
             'title': f'{user_db.firstname} {user_db.lastname}',
-            'user': f'{user_db.firstname} {user_db.lastname}',
+            'user': user_db,
             'message': 'Видано книжки:',
             'books': list_received_books,
         }
-
+        # for book in list_received_books:
+        #     print('!!!', book)
         return render(request, 'user_books.html', context=context)
 
     return redirect('library')
@@ -158,7 +204,7 @@ def user_books(request, user_id=None):
         user = User.objects.get(id=user_id)
 
         list_books = user.books.all().values('id', 'title', 'author', 'year', 'genre__name', 'borrows__date_received',
-                                             'borrows__date_returned').order_by('id')
+                                             'borrows__date_returned').order_by('borrows__date_received')
         context = {
             'title': f'{user.firstname} {user.lastname}',
             'user': user,
@@ -172,9 +218,7 @@ def user_books(request, user_id=None):
 def return_books(request, user_id=None):
     if request.method == 'POST':
         selected_books_id = request.POST.getlist('select_book')
-        user_db = get_object_or_404(User, id=user_id)
-
-        # user_db.books.add(*selected_books_id)
+        user_db = User.objects.get(id=user_id)
 
         current_time = datetime.now()
 
@@ -187,3 +231,22 @@ def return_books(request, user_id=None):
 
         # return redirect('library')
         return redirect('user_books', user_id=user_id)
+
+
+def book_users(request, book_id=None):
+    """ Виводить список читачів обраної книги """
+    if request.method == 'GET':
+        selected_book = Book.objects.get(id=book_id)
+        users = (selected_book.borrows.values(
+            'user__id',
+            'user__firstname',
+            'user__lastname',
+            'user__account__email',
+            'date_received',
+            'date_returned',).order_by('date_received'))
+
+        context = {
+            'book': selected_book,
+            'users': users,
+        }
+        return render(request, 'book_users.html', context=context)

@@ -11,7 +11,7 @@ class User(models.Model):
     age = models.IntegerField(null=True)
     phone = models.CharField(max_length=30, null=True, unique=True)
 
-    books = models.ManyToManyField('library.Book', through='library.UserBooks')
+    books = models.ManyToManyField('library.Book', through='library.UserBooks', related_name='userbooks')
 
     def __str__(self):
         return f'{self.firstname} {self.lastname} {self.age} {self.phone}'

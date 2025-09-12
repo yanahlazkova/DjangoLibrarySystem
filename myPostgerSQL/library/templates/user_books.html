@@ -53,7 +53,7 @@
                   <td>{{ book.genre__name }}</td>
                   <td>{{ book.borrows__date_received }}</td>
                   <td>{{ book.borrows__date_returned }}</td>
-                  <td><input type="checkbox" name="select_book" value="{{ book.id }}"></td>
+                  <td><input type="checkbox" name="select_book" value="{{ book.id }}" {% if book.borrows__date_returned %} disabled title="Не доступний" {% endif %}></td>
                 </tr>
               {% empty %}
               <p style="color: green;">No data</p>

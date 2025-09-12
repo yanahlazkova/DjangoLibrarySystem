@@ -46,11 +46,13 @@
           <!-- forloop.counter виводить номер рядка -->
           <td style="color: lightblue">{{ forloop.counter }}</td>
           <td>{{ book.id }}</td>
-          <td>{{ book.title }}</td>
+          <td><a href="{% url 'book_users' book.id %}">{{ book.title }}</a></td>
           <td>{{ book.author }}</td>
           <td>{{ book.year }}</td>
           <td>{{ book.genre__name }}</td>
-          <td>{{ book.user_set }}</td>
+          {% with user_name=book.borrows__user__firstname|add:" "|add:book.borrows__user__lastname %}
+            <td><a href="{% url 'user_books' book.borrows__user__id %}">{{ user_name }}</a></td>
+          {% endwith %}
           <td>
 <!--              <button type="button" class="delete" onclick="delUser('{{ user.id }}')">Delete</button>-->
               <button type="button" class="delete">Delete</button>

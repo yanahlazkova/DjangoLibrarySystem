@@ -19,7 +19,7 @@
     <h3 style="color: lightblue;">Видача книжок читачам</h3>
 
 <div style="display: flex; justify-content: space-around;">
-  <div style="height: 400px; width: 48%; overflow: auto; border: 1px solid black; padding: 5px;">
+  <div style="height: 530px; width: 48%; overflow: auto; border: 1px solid black; padding: 5px;">
     <table style="width: 95%">
       <thead>
         <tr>
@@ -45,44 +45,146 @@
       {% endif %}
     </table>
   </div>
-  <div style="height: 400px; width: 48%; overflow: auto; border: 1px solid black; padding: 5px;">
-    <table style="width: 95%">
-      <thead>
-        <tr>
-          <th></th>
-          <th>ID</th>
-          <th>Title</th>
-          <th>Author</th>
-          <th>Year</th>
-          <th>Genre</th>
-          <th>Date received</th>
-          <th>Date returned</th>
-        </tr>
-      </thead>
-        {% if books %}
-      <tbody>
-          {% for book in books %}
-        <tr class="{% cycle 'gray' 'pink' %}" id="row-{{ book.id }}">
-          <td><input type="checkbox" name="select_book" value="{{ book.id }}"></td>
-          <td>{{ book.id }}</td>
-          <td>{{ book.title }}</td>
-          <td>{{ book.author }}</td>
-          <td>{{ book.year }}</td>
-          <td>{{ book.genre__name }}</td>
-          <td>{{ book.borrows__date_received }}</td>
-          <td>{{ book.borrows__date_returned }}</td>
-        </tr>
-          {% empty %}
-          <p>Немає даних</p>
-          {% endfor %}
-      </tbody>
-        {% else %}
-        <p style="color: green;" >Немає ще даних</p>
-        {% endif %}
-    </table>
+
+    <!--  Таблиці книжок -->
+  <div style="height: 530px; width: 48%; overflow: auto; border: 1px solid black; padding: 5px;">
+    <div class="tabs-container">
+        <div class="tab-header active" data-tab="available">Доступні книги</div>
+        <div class="tab-header" data-tab="unavailable">Видані книги</div>
+        <div class="tab-header" data-tab="all">Всі книги</div>
+    </div>
+    <div id="available" class="tab-content active">
+        <table style="width: 95%">
+          <thead>
+            <tr>
+              <th></th>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Year</th>
+              <th>Genre</th>
+              <th>Date received</th>
+              <th>Date returned</th>
+            </tr>
+          </thead>
+            {% if books_available %}
+          <tbody>
+              {% for book in books_available %}
+            <tr class="{% cycle 'gray' 'pink' %}" id="row-available-{{ book.id }}">
+              <td><input type="checkbox" name="select_book" value="{{ book.id }}"></td>
+              <td>{{ book.id }}</td>
+              <td>{{ book.title }}</td>
+              <td>{{ book.author }}</td>
+              <td>{{ book.year }}</td>
+              <td>{{ book.genre__name }}</td>
+              <td>{{ book.borrows__date_received }}</td>
+              <td>{{ book.borrows__date_returned }}</td>
+            </tr>
+              {% empty %}
+              <p>Немає даних</p>
+              {% endfor %}
+          </tbody>
+            {% else %}
+            <p style="color: green;" >Немає ще даних</p>
+            {% endif %}
+        </table>
+    </div>
+    <div id="unavailable" class="tab-content">
+        <table style="width: 95%">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Year</th>
+              <th>Genre</th>
+              <th>Date received</th>
+              <th>Date returned</th>
+            </tr>
+          </thead>
+            {% if books_unavailable %}
+          <tbody>
+              {% for book in books_unavailable %}
+            <tr class="{% cycle 'gray' 'pink' %}" id="row-unavailable-{{ book.id }}">
+
+              <td>{{ book.id }}</td>
+              <td>{{ book.title }}</td>
+              <td>{{ book.author }}</td>
+              <td>{{ book.year }}</td>
+              <td>{{ book.genre__name }}</td>
+              <td>{{ book.borrows__date_received }}</td>
+              <td>{{ book.borrows__date_returned }}</td>
+            </tr>
+              {% empty %}
+              <p>Немає даних</p>
+              {% endfor %}
+          </tbody>
+            {% else %}
+            <p style="color: green;" >Немає ще даних</p>
+            {% endif %}
+        </table>
+    </div><div id="all" class="tab-content">
+        <table style="width: 95%">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Reader</th>
+              <th>Reader id</th>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Date received</th>
+              <th>Date returned</th>
+            </tr>
+          </thead>
+            {% if books %}
+          <tbody>
+              {% for book in books %}
+            <tr class="{% cycle 'gray' 'pink' %}" id="row-{{ book.id }}">
+              <td>{{ book.id }}</td>
+              {% with user_name=book.user__firstname|add:" "|add:book.user__lastname %}
+              <td>{{ user_name }}</td>
+              {% endwith %}
+              <td>{{ book.user__id }}</td>
+              <td>{{ book.book__title }}</td>
+              <td>{{ book.book__author }}</td>
+              <td>{{ book.date_received }}</td>
+              <td>{{ book.date_returned }}</td>
+            </tr>
+              {% empty %}
+              <p>Немає даних</p>
+              {% endfor %}
+          </tbody>
+            {% else %}
+            <p style="color: green;" >Немає ще даних</p>
+            {% endif %}
+        </table>
+    </div>
   </div>
 
 </div>
     <button type="submit">Apply</button>
 </form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabs = document.querySelectorAll('.tab-header');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Убираем "active" класс со всех вкладок и контента
+                tabs.forEach(item => item.classList.remove('active'));
+                contents.forEach(item => item.classList.remove('active'));
+
+                // Добавляем "active" класс к выбранной вкладке
+                tab.classList.add('active');
+
+                // Показываем соответствующий контент
+                const targetTabId = tab.getAttribute('data-tab');
+                const targetContent = document.getElementById(targetTabId);
+                targetContent.classList.add('active');
+            });
+        });
+    });
+</script>
 {% endblock content %}

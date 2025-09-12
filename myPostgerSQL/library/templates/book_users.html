@@ -1,0 +1,51 @@
+{% extends "master.html" %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+
+<p>Book: <span style="color: lightblue; font-size: 24px;">{{ book.id }} {{ book.title }} {{ user.author }} {{ book.year }}</span></p>
+<input type="hidden" name="book_id">
+
+<p style="color: green;">{{ message }}</p>
+
+    <div style="height: 400px; width:70%; overflow: auto; border: 1px solid black; padding: 5px;">
+        <table style="width: 95%">
+          <thead>
+            <tr>
+              <th>N</th>
+              <th>ID</th>
+              <th>First name</th>
+              <th>Last name</th>
+              <th>E-mail</th>
+              <th>Date received</th>
+              <th>Date returned</th>
+              </tr>
+            </thead>
+              {% if users %}
+            <tbody>
+              {% for user in users %}
+                <tr class="{% cycle 'gray' 'pink' %}" id="row-{{ book.id }}" {% if not book.borrows__date_returned %} style="color: blue;" {% endif %}>
+                  <td style="color: lightblue">{{ forloop.counter }}</td>
+                  <td>{{ user.id }}</td>
+                  <td>{{ user.user__firstname }}</td>
+                  <td>{{ user.user__lastname }}</td>
+                  <td>{{ user.user__account__email }}</td>
+                  <td>{{ user.date_received }}</td>
+                  <td>{{ user.date_returned }}</td>
+<!--                  <td><input type="checkbox" name="select_book" value="{{ book.id }}" {% if book.borrows__date_returned %} disabled title="Не доступний" {% endif %}></td>-->
+                </tr>
+              {% empty %}
+              <p style="color: green;">No data</p>
+              {% endfor %}
+            </tbody>
+            {% else %}
+            <p style="color: green;">No data</p>
+            {% endif %}
+        </table>
+    </div>
+
+
+{% endblock content %}
