@@ -63,7 +63,7 @@
               <th>Author</th>
               <th>Year</th>
               <th>Genre</th>
-              <th>Date received</th>
+<!--              <th>Date received</th>-->
               <th>Date returned</th>
             </tr>
           </thead>
@@ -71,13 +71,15 @@
           <tbody>
               {% for book in books_available %}
             <tr class="{% cycle 'gray' 'pink' %}" id="row-available-{{ book.id }}">
-              <td><input type="checkbox" name="select_book" value="{{ book.id }}"></td>
+              <td>
+                  <input type="checkbox" name="select_book" value="{{ book.id }}">
+              </td>
               <td>{{ book.id }}</td>
               <td>{{ book.title }}</td>
               <td>{{ book.author }}</td>
               <td>{{ book.year }}</td>
               <td>{{ book.genre__name }}</td>
-              <td>{{ book.borrows__date_received }}</td>
+<!--              <td>{{ book.borrows__date_received }}</td>-->
               <td>{{ book.borrows__date_returned }}</td>
             </tr>
               {% empty %}
