@@ -8,6 +8,10 @@ class Book(models.Model):
     author = models.CharField(max_length=255)
     year = models.IntegerField()
     genre = models.ForeignKey('Genre', on_delete=models.CASCADE, null=True)
+    #
+    class Meta:
+        ordering = ['-id']
+
 
     # Many-to-Many зв'язок з моделлю User
     # через проміжну модель Borrow

@@ -16,7 +16,7 @@ def main(request):
 def books(request):
     form = BookForm()
     if request.method == 'GET':
-        list_books = Book.objects.all().values(
+        list_books = (Book.objects.all().values(
             'id',
             'title',
             'author',
@@ -25,13 +25,18 @@ def books(request):
             'borrows__user__id',
             'borrows__user__firstname',
             'borrows__user__lastname',
-        ).distinct('id').order_by('id')
+        )
+                      .distinct('id')
+                      # .order_by('id')
+                      )
+
         context = {
             'form': form,
             'books': list_books,
         }
 
         return render(request, 'books.html', context=context)
+
     return redirect('main')
 
 def add_book(request):
@@ -250,3 +255,17 @@ def book_users(request, book_id=None):
             'users': users,
         }
         return render(request, 'book_users.html', context=context)
+
+
+class SearchData:
+
+    def __init__(self, field, model_name):
+        self.table_name = model_name
+        self.field = field
+        # self.model = self._get_model()
+
+    def _get_model(self):
+        print(f'Model: {self.__dict__}')
+
+    def search(self):
+        pass

@@ -50,9 +50,13 @@
           <td>{{ book.author }}</td>
           <td>{{ book.year }}</td>
           <td>{{ book.genre__name }}</td>
+          {% if book.borrows__user__firstname %}
           {% with user_name=book.borrows__user__firstname|add:" "|add:book.borrows__user__lastname %}
             <td><a href="{% url 'user_books' book.borrows__user__id %}">{{ user_name }}</a></td>
           {% endwith %}
+          {% else %}
+            <td></td>
+          {% endif %}
           <td>
 <!--              <button type="button" class="delete" onclick="delUser('{{ user.id }}')">Delete</button>-->
               <button type="button" class="delete">Delete</button>
