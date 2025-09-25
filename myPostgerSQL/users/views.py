@@ -13,24 +13,20 @@ edit_user_form = EditUserForm()
 
 def get_list_users():
     try:
-        users = Account.objects.all().values()
+        users = (Account.objects.all().values(
+            'id',
+            'email',
+            'login',
+            'password',
+            'user__firstname',
+            'user__lastname',
+            'user__age',
+            'user__phone',
+        )
+                 # .distinct('id')
+                 )
 
-        list_users = []
-        for user in users:
-            user_data = User.objects.get(id=user['user_id'])
-            data = {
-                    'id': user['id'],
-                    'email': user['email'],
-                    'login': user['login'],
-                    'password': user['password'],
-                    'firstname': user_data.firstname,
-                    'lastname': user_data.lastname,
-                    'age': user_data.age,
-                    'phone': user_data.phone,
-                }
-            list_users.append(data)
-
-        return list_users
+        return users # list_users
     except Exception as e:
         return {'message': f'DataBase is empty or {e}'}
 
@@ -46,20 +42,30 @@ def all_users(request):
         if search_by and query:
             # __iexact - регістро-незалежний
             # __icontains - може містити
+            field_values = ('id',
+                        'email',
+                        'login',
+                        'password',
+                        'user__firstname',
+                        'user__lastname',
+                        'user__age',
+                        'user__phone',)
             list_users = []
             match search_by:
                 case 'firstname':
-                    list_users = User.objects.filter(firstname__icontains=query)
+                    list_users = Account.objects.filter(user__firstname__icontains=query).values(*field_values)
                 case 'lastname':
-                    list_users = User.objects.filter(lastname__icontains=query)
+                    list_users = Account.objects.filter(user__lastname__icontains=query).values(
+                        *field_values
+                    )
                 case 'age':
-                    list_users = User.objects.filter(age__icontains=query)
+                    list_users = Account.objects.filter(user__age__icontains=query).values(*field_values)
                 case 'email':
-                    list_users = User.objects.filter(email__icontains=query)
+                    list_users = Account.objects.filter(email__icontains=query).values(*field_values)
                 case 'phone':
-                    list_users = User.objects.filter(phone__icontains=query)
+                    list_users = Account.objects.filter(user__phone__icontains=query).values(*field_values)
                 case 'id':
-                    list_users = User.objects.filter(id__icontains=query)
+                    list_users = Account.objects.filter(id__icontains=query).values(*field_values)
 
         context = {
             'form_new_user': new_user_form,

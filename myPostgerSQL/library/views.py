@@ -26,7 +26,7 @@ def books(request):
             'borrows__user__firstname',
             'borrows__user__lastname',
         )
-                      .distinct('id')
+                      # .distinct('id')
                       # .order_by('id')
                       )
 
@@ -163,18 +163,20 @@ def library(request):
 
 
 def receive_books(request):
+    """ Видача книжок читачам """
     if request.method == 'POST':
         select_user_id = request.POST.get('select_user')
         selected_books_id = request.POST.getlist('select_book')
 
-        user_db = get_object_or_404(User, id=select_user_id)
+        # user_db = get_object_or_404(User, id=select_user_id)
+        user_db = User.objects.get(id=select_user_id)
 
         current_time = datetime.now()
         user_db.books.add(*selected_books_id)
 
         #
         for book_id in selected_books_id:
-            user_book_entry = UserBooks.objects.get(user=select_user_id, book=book_id, date_returned__isnull=True)
+            user_book_entry = UserBooks.objects.get(user=select_user_id, book=book_id, date_received__isnull=True)
             user_book_entry.date_received = current_time
             # print('!!!user_book_entry', user_book_entry)
             user_book_entry.save()
@@ -257,15 +259,16 @@ def book_users(request, book_id=None):
         return render(request, 'book_users.html', context=context)
 
 
-class SearchData:
-
-    def __init__(self, field, model_name):
-        self.table_name = model_name
-        self.field = field
-        # self.model = self._get_model()
-
-    def _get_model(self):
-        print(f'Model: {self.__dict__}')
-
-    def search(self):
-        pass
+# class SearchData:
+#
+#     # def __init__(self, field, model_name):
+#     #     self.table_name = model_name
+#     #     self.field = field
+#         # self.model = self._get_model()
+#
+#     @staticmethod
+#     def _get_model( field_name, model_name):
+#         print(f'Model: {isinstance(model_name.__dict__[field_name])}')
+#
+#     def search(self):
+#         pass

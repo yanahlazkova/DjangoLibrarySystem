@@ -22,6 +22,9 @@ class Account(models.Model):
     password = models.CharField(max_length=255, null=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
 
+    class Meta:
+        ordering = ['-id']
+
     def __str__(self):
         return f'{self.email} {self.login} {self.password} {self.user}'
 
