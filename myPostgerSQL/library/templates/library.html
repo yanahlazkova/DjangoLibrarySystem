@@ -25,8 +25,7 @@
         <tr>
           <td></td>
           <td>ID</td>
-          <td>First name</td>
-          <td>Last name</td>
+          <td>Reader</td>
           <td>Email</td>
         </tr>
       </thead>
@@ -36,8 +35,7 @@
         <tr class="{% cycle 'gray' 'pink' %}" id="row-{{ user.id }}">
           <td><input type="radio" name="select_user" value="{{ user.id }}"></td>
           <td>{{ user.id }}</td>
-          <td>{{ user.firstname }}</td>
-          <td>{{ user.lastname }}</td>
+          <td>{{ user.firstname }} {{ user.lastname }}</td>
             <td><a href="{% url 'user_books' user.id %}">{{ user.account__email }}</a></td>
         </tr>
         {% endfor %}
@@ -80,7 +78,7 @@
               <td>{{ book.year }}</td>
               <td>{{ book.genre__name }}</td>
 <!--              <td>{{ book.borrows__date_received }}</td>-->
-              <td>{{ book.borrows__date_returned }}</td>
+              <td>{{ book.latest_return_date }}</td>
             </tr>
               {% empty %}
               <p>Немає даних</p>
@@ -125,15 +123,15 @@
             <p style="color: green;" >Немає ще даних</p>
             {% endif %}
         </table>
-    </div><div id="all" class="tab-content">
+    </div>
+    <div id="all" class="tab-content">
         <table style="width: 95%">
           <thead>
             <tr>
               <th>ID</th>
-              <th>Reader</th>
-              <th>Reader id</th>
               <th>Title</th>
               <th>Author</th>
+              <th>Reader</th>
               <th>Date received</th>
               <th>Date returned</th>
             </tr>
@@ -143,14 +141,22 @@
               {% for book in books %}
             <tr class="{% cycle 'gray' 'pink' %}" id="row-{{ book.id }}">
               <td>{{ book.id }}</td>
-              {% with user_name=book.user__firstname|add:" "|add:book.user__lastname %}
-              <td>{{ user_name }}</td>
-              {% endwith %}
-              <td>{{ book.user__id }}</td>
-              <td>{{ book.book__title }}</td>
-              <td>{{ book.book__author }}</td>
-              <td>{{ book.date_received }}</td>
-              <td>{{ book.date_returned }}</td>
+              <td>{{ book.title }}</td>
+              <td>{{ book.author }}</td>
+              {% if book.borrows__user__id %}
+                {% comment %}
+                  {% with user_name=book.user__firstname|add:" "|add:book.user__lastname %}
+                  {% endwith %}
+                {% endcomment %}
+                <td><a href="{% url 'user_books' book.borrows__user__id %}">({{ book.borrows__user__id }}) {{ book.borrows__user__firstname }} {{ book.borrows__user__lastname }}</a></td>
+              {% else %}
+              <td></td>
+                {% endif %}
+<!--              <td>{{ book.user__id }}</td>-->
+<!--              <td>{{ book.user__firstname }} {{ book.user__lastname }}</td>-->
+
+              <td>{{ book.borrows__date_received }}</td>
+              <td>{{ book.borrows__date_returned }}</td>
             </tr>
               {% empty %}
               <p>Немає даних</p>

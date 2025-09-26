@@ -31,7 +31,7 @@ def all_users(request):
                         'user__lastname',
                         'user__age',
                         'user__phone',)
-        list_users = get_list_users(*field_values)
+        list_users = get_list_users(field_values)
 
         # list_users = []
         form = SearchForm(request.GET or None)

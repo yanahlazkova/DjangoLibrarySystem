@@ -1,5 +1,6 @@
 from asgiref.typing import HTTPRequestEvent
 from django.contrib import messages
+from django.db.models import Max
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -14,6 +15,11 @@ def main(request):
 
 
 def books(request):
+    # print()
+    # books = UserBooks.objects.all()
+    # print('!!!', len(books))
+    # print()
+
     form = BookForm()
     if request.method == 'GET':
         list_books = (Book.objects.all().values(
@@ -151,41 +157,50 @@ def library(request):
                  .values('id', 'firstname', 'lastname', 'account__email')
                  )
 
-        list_books_available = (Book.objects.exclude(borrows__date_returned__isnull=True)
-                      .order_by('id').distinct('id')
-                      .values('id',
-                         'title',
-                         'author',
-                         'year',
-                         'genre__name',
-                         'borrows__date_received',
-                         'borrows__date_returned')
-                      )
-        list_books_unavailable = (Book.objects.filter(borrows__date_returned__isnull=True)
-                      .order_by('id')
-                      .values('id',
-                         'title',
-                         'author',
-                         'year',
-                         'genre__name',
-                         'borrows__date_received',
-                         'borrows__date_returned')
-                      )
-        list_books = (UserBooks.objects.all()
-                      .order_by('id')
-                      .values('id',
-                              'user__id',
-                              'user__firstname',
-                              'user__lastname',
-                              'book__title',
-                              'book__author',
-                              'date_received',
-                              'date_returned')
-                      )
+        # Список виданих книжок
+        list_books_unavailable = (Book.objects.filter(borrows__date_received__isnull=False, borrows__date_returned__isnull=True)
+                                # .annotate(latest_return_date=Max('borrows__date_returned'))
+                                .order_by('id').values('id',
+                                                       'title',
+                                                       'author',
+                                                       'year',
+                                                       'genre__name',
+                                                       'borrows__date_received',
+                                                       'borrows__date_returned'))
 
+        # Список доступних книжок
+        # 1. Анотуємо кожну книгу максимальною (найсвіжішою) датою повернення
+        # Якщо книга не має жодної видачі, 'latest_return_date' буде NULL
+        all_books_with_status = Book.objects.annotate(
+            latest_return_date=Max('borrows__date_returned')
+        ).order_by('id')
+        # 2. Вибираємо потрібні поля
+        list_books_available = all_books_with_status.values(
+            'id',
+            'title',
+            'author',
+            'year',
+            'genre__name',
+            'latest_return_date',
+            )
+
+        # Список всіх книжок
+        list_books = (Book.objects.all()
+                      .order_by('id')
+                      .values('id',
+                              'title',
+                              'author',
+                              'borrows__user__id',
+                              'borrows__user__firstname',
+                              'borrows__user__lastname',
+                              'borrows__date_received',
+                              'borrows__date_returned')
+                      )
         # print()
-        # print(books[23])
+        # for book in list_books:
+        #     print(book)
         # print()
+
         context = {
             'users': users,
             'books': list_books,
