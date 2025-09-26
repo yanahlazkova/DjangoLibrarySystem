@@ -16,6 +16,9 @@ class User(models.Model):
     def __str__(self):
         return f'{self.firstname} {self.lastname} {self.age} {self.phone}'
 
+    def full_name(self):
+        return f'{self.firstname} {self.lastname}'
+
 class Account(models.Model):
     email = models.EmailField(null=False, unique=True)
     login = models.CharField(max_length=255, null=False)

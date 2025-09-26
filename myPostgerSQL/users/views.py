@@ -5,26 +5,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .forms import UserForm, EditUserForm
+from .forms import UserForm, EditUserForm, SearchForm
 from .models import User, Account
 
 new_user_form = UserForm()
 edit_user_form = EditUserForm()
 
-def get_list_users():
+def get_list_users(field_values):
     try:
-        users = (Account.objects.all().values(
-            'id',
-            'email',
-            'login',
-            'password',
-            'user__firstname',
-            'user__lastname',
-            'user__age',
-            'user__phone',
-        )
-                 # .distinct('id')
-                 )
+        users = Account.objects.all().values(*field_values)
 
         return users # list_users
     except Exception as e:
@@ -33,16 +22,8 @@ def get_list_users():
 
 def all_users(request):
     if request.method == 'GET':
-        search_by = request.GET.get('search_by')
-        query = request.GET.get('gsearch')
-
         # Отримати список користувачів з БД
-        list_users = get_list_users()
-
-        if search_by and query:
-            # __iexact - регістро-незалежний
-            # __icontains - може містити
-            field_values = ('id',
+        field_values = ('id',
                         'email',
                         'login',
                         'password',
@@ -50,29 +31,43 @@ def all_users(request):
                         'user__lastname',
                         'user__age',
                         'user__phone',)
-            list_users = []
-            match search_by:
-                case 'firstname':
-                    list_users = Account.objects.filter(user__firstname__icontains=query).values(*field_values)
-                case 'lastname':
-                    list_users = Account.objects.filter(user__lastname__icontains=query).values(
-                        *field_values
-                    )
-                case 'age':
-                    list_users = Account.objects.filter(user__age__icontains=query).values(*field_values)
-                case 'email':
-                    list_users = Account.objects.filter(email__icontains=query).values(*field_values)
-                case 'phone':
-                    list_users = Account.objects.filter(user__phone__icontains=query).values(*field_values)
-                case 'id':
-                    list_users = Account.objects.filter(id__icontains=query).values(*field_values)
+        list_users = get_list_users(*field_values)
+
+        # list_users = []
+        form = SearchForm(request.GET or None)
+
+        if form.is_valid():
+            field = form.cleaned_data['field']
+            query = form.cleaned_data['query']
+
+            if field and query:
+                # __iexact - регістро-незалежний
+                # __icontains - може містити
+
+                match field:
+                    case 'firstname':
+                        list_users = Account.objects.filter(user__firstname__icontains=query).values(*field_values)
+                    case 'lastname':
+                        list_users = Account.objects.filter(user__lastname__icontains=query).values(
+                            *field_values
+                        )
+                    case 'age':
+                        list_users = Account.objects.filter(user__age__icontains=query).values(*field_values)
+                    case 'email':
+                        list_users = Account.objects.filter(email__icontains=query).values(*field_values)
+                    case 'phone':
+                        list_users = Account.objects.filter(user__phone__icontains=query).values(*field_values)
+                    case 'id':
+                        list_users = Account.objects.filter(id__icontains=query).values(*field_values)
 
         context = {
             'form_new_user': new_user_form,
             'form_edit_user': edit_user_form,
+            'form_search': form,
+            'action': 'users',
             'title': 'List users',
             'users': list_users,
-            'search_by': search_by,
+            'search_by': request.GET.get('field'),
         }
 
         return render(request, 'users.html', context)

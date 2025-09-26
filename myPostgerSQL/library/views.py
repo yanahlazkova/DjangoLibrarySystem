@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .forms import BookForm
+from .forms import BookForm, SearchForm
 from library.models import Genre, Book, UserBooks
 from users.models import User
 
@@ -29,10 +29,44 @@ def books(request):
                       # .distinct('id')
                       # .order_by('id')
                       )
+        form_search = SearchForm(request.GET or None)
+
+        if form_search.is_valid():
+            field = form_search.cleaned_data['field']
+            query = form_search.cleaned_data['query']
+
+            if field and query:
+                # __iexact - регістро-незалежний
+                # __icontains - може містити
+                field_values = (
+                    'id',
+                    'title',
+                    'author',
+                    'year',
+                    'genre__name',
+                    'borrows__user__id',
+                    # 'borrows__user__full_name',
+                )
+
+                match field:
+                    case 'title':
+                        list_books = Book.objects.filter(title__icontains=query).values(*field_values)
+                    case 'author':
+                        list_books = Book.objects.filter(author__icontains=query).values(
+                            *field_values
+                        )
+                    case 'year':
+                        list_books = Book.objects.filter(year__icontains=query).values(*field_values)
+                    case 'genre':
+                        list_books = Book.objects.filter(genre__name__icontains=query).values(*field_values)
 
         context = {
             'form': form,
+            'form_search': form_search,
+            'action': 'books',
+            'title': 'List books',
             'books': list_books,
+            'search_by': request.GET.get('field'),
         }
 
         return render(request, 'books.html', context=context)

@@ -50,9 +50,9 @@
           <td>{{ book.author }}</td>
           <td>{{ book.year }}</td>
           <td>{{ book.genre__name }}</td>
-          {% if book.borrows__user__firstname %}
+          {% if book.borrows__user__full_name %}
           {% with user_name=book.borrows__user__firstname|add:" "|add:book.borrows__user__lastname %}
-            <td><a href="{% url 'user_books' book.borrows__user__id %}">{{ user_name }}</a></td>
+            <td><a href="{% url 'user_books' book.borrows__user__id %}">{{ book.borrows__user__full_name }}</a></td>
           {% endwith %}
           {% else %}
             <td></td>

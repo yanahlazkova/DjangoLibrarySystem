@@ -12,5 +12,19 @@ class BookForm(forms.ModelForm):
         model = Book
         fields = ['title', 'author', 'year', 'genre']
 
+SEARCH_CHOICES = [
+    ('title', "Назва"),
+    ('author', 'Автор'),
+    ('year', 'Рік'),
+    ('genre', 'Жанр'),
 
+]
+
+class SearchForm(forms.Form):
+    field = forms.ChoiceField(
+        choices=SEARCH_CHOICES,
+        widget=forms.RadioSelect(attrs={'class': 'search'}),
+        label="Пошук за"
+    )
+    query = forms.CharField(label="Запрос", required=False)
 

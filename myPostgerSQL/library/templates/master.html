@@ -51,6 +51,19 @@
             {% endcomment %}
         </ul>
     </div>
+    {% if form_search %}
+    {% block search %}
+    <form class="search" action="{% url action %}" method="get">
+          <fieldset style="border: 1px solid lightblue">
+            <legend style="color: lightblue" >Search</legend>
+              <div style="color: lightblue">
+                {{ form_search.as_p }}
+              </div>
+              <input type="submit" value="Пошук">
+          </fieldset>
+    </form>
+    {% endblock search %}
+    {% endif %}
 
     {% block content %}
     {% endblock content %}

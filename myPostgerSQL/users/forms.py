@@ -48,3 +48,20 @@ class EditUserForm(forms.ModelForm):
             user.save()
 
         return account
+
+SEARCH_CHOICES = [
+    ('firstname', "Ім'я"),
+    ('lastname', 'Прізвище'),
+    ('age', 'Вік'),
+    ('phone', 'Телефон'),
+    ('email', 'Email'),
+    ('login', 'Логін'),
+]
+
+class SearchForm(forms.Form):
+    field = forms.ChoiceField(
+        choices=SEARCH_CHOICES,
+        widget=forms.RadioSelect(attrs={'class': 'search'}),
+        label="Пошук за"
+    )
+    query = forms.CharField(label="Запрос", required=False)
