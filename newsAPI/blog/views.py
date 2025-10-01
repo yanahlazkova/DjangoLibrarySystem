@@ -26,7 +26,7 @@ def index(request):
     url = f'https://newsapi.org/v2/top-headlines?country=us&apiKey={api_key}'
     resp = requests.get(url).json()
 
-    # print(resp)
+    print(resp)
 
     list_posts = resp.get('articles', [])
     context = {
