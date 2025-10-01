@@ -7,17 +7,18 @@
 {% block content %}
     <h1 class="mb-5">Posts:</h1>
     {% for post in posts %}
-    <div class="card" style="width: 18rem;">
+    <div class="card mb-3">
+            <h6 class="card-subtitle mb-2 text-body-secondary">Source: {{ post.source.name }}</h6>
+        <img src="{{ post.urlToImage }}" class="card-img-top" alt="{{ post.title }}">
         <div class="card-body">
             <h5 class="card-title">{{ post.title }}</h5>
-            <h6 class="card-subtitle mb-2 text-body-secondary">{{ post.data }}</h6>
-            <p class="card-text">{{ post.body|truncatewords:15 }}</p>
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Read</a>
+<!--            <p class="card-text">{{ post.content }}</p>-->
+            <p class="card-text">{{ post.description|truncatewords:200 }}</p>
+            <p class="card-link"><small class="text-body-secondary">Author: {{ post.author }}</small></p>
+            <p class="card-link"><small class="text-body-secondary">Data published: {{ post.publishedAt }}</small></p>
+            <a href="{{ post.url }}" class="btn btn-primary">Read all</a>
         </div>
     </div>
-    <p>
-        {{ post.title }}
-    </p>
+
     {% endfor %}
 {% endblock content %}

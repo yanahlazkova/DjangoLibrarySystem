@@ -30,7 +30,7 @@ NEWS_API_KEY = os.getenv('NEWS_API_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'False'
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = ['yourusername.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 
