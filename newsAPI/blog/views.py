@@ -2,13 +2,13 @@ import sys
 
 from django.http import HttpResponseNotFound, Http404, HttpResponse, HttpResponseBadRequest, HttpResponseServerError, \
     HttpResponseForbidden
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.defaulttags import lorem
 
 from blog.models import Post
 
 
-def posts_list(request):
+def index(request):
     from faker import Faker
 
     fake = Faker(locale='uk_UA')
@@ -24,8 +24,9 @@ def posts_list(request):
 
 def archive(request, year):
     if int(year) > 2025:
-        raise Http404()
-
+        # raise Http404() # відображення сторінки з кодом 404 (функція page_not_found(request, exception))
+        # return redirect('posts') # редірект з кодом 302 - url змінився тимчасово
+        return redirect('home', permanent=True) # редірект з кодом 301 - постійний url permanent=True
     return HttpResponse(f'<h1>Архів за {year} рік</h1>')
 
 

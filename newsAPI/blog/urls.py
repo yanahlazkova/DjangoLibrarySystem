@@ -1,7 +1,7 @@
-from django.urls import path
+from django.urls import path, re_path
 from .views import *
 
 urlpatterns = [
-    path('', posts_list),
-    path('archive/<int:year>', archive),
+    path('', index, name='home'),
+    re_path(r'^archive/(?P<year>[0-9]{4})/', archive, name='archive'),
 ]
