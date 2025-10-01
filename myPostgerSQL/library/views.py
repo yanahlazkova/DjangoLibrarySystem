@@ -15,14 +15,13 @@ def main(request):
 
 
 def books(request):
-    # print()
-    # books = UserBooks.objects.all()
-    # print('!!!', len(books))
-    # print()
-
+    """ виводить список книжок:
+    - доступні,
+    - якщо видані, то показати дату коли було видано,
+    """
     form = BookForm()
     if request.method == 'GET':
-        list_books = (Book.objects.all().values(
+        field_values = (
             'id',
             'title',
             'author',
@@ -31,10 +30,17 @@ def books(request):
             'borrows__user__id',
             'borrows__user__firstname',
             'borrows__user__lastname',
+            # 'borrows__date_received',
+            'latest_return_date',
         )
-                      # .distinct('id')
-                      # .order_by('id')
-                      )
+
+        all_books_with_status = (Book.objects.annotate(
+            latest_return_date=Max('borrows__date_returned'),
+            latest_receive_date=Max('borrows__date_received'),
+        ).order_by('id'))
+
+        list_books = all_books_with_status.values(*field_values)
+
         form_search = SearchForm(request.GET or None)
 
         if form_search.is_valid():
@@ -44,15 +50,6 @@ def books(request):
             if field and query:
                 # __iexact - регістро-незалежний
                 # __icontains - може містити
-                field_values = (
-                    'id',
-                    'title',
-                    'author',
-                    'year',
-                    'genre__name',
-                    'borrows__user__id',
-                    # 'borrows__user__full_name',
-                )
 
                 match field:
                     case 'title':
@@ -65,7 +62,10 @@ def books(request):
                         list_books = Book.objects.filter(year__icontains=query).values(*field_values)
                     case 'genre':
                         list_books = Book.objects.filter(genre__name__icontains=query).values(*field_values)
-
+        print()
+        for book in list_books:
+            print(book)
+        print()
         context = {
             'form': form,
             'form_search': form_search,

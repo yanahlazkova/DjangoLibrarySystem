@@ -148,7 +148,8 @@
                   {% with user_name=book.user__firstname|add:" "|add:book.user__lastname %}
                   {% endwith %}
                 {% endcomment %}
-                <td><a href="{% url 'user_books' book.borrows__user__id %}">({{ book.borrows__user__id }}) {{ book.borrows__user__firstname }} {{ book.borrows__user__lastname }}</a></td>
+                <td><a href="{% url 'user_books' book.borrows__user__id %}">
+                    (id-{{ book.borrows__user__id }}) {{ book.borrows__user__firstname }} {{ book.borrows__user__lastname }}</a></td>
               {% else %}
               <td></td>
                 {% endif %}

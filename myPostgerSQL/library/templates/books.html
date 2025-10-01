@@ -38,6 +38,8 @@
             <td>Year</td>
             <td>Genre</td>
             <td>Reader</td>
+            <td>Data received</td>
+            <td>Data returned</td>
             <td></td>
         </tr>
         {% if books %}
@@ -50,11 +52,14 @@
           <td>{{ book.author }}</td>
           <td>{{ book.year }}</td>
           <td>{{ book.genre__name }}</td>
-          {% if book.borrows__user__full_name %}
-          {% with user_name=book.borrows__user__firstname|add:" "|add:book.borrows__user__lastname %}
-            <td><a href="{% url 'user_books' book.borrows__user__id %}">{{ book.borrows__user__full_name }}</a></td>
-          {% endwith %}
+          {% if book.borrows__user__id %}
+            <td><a href="{% url 'user_books' book.borrows__user__id %}">
+                (id-{{ book.borrows__user__id }}) {{ book.borrows__user__firstname }} {{ book.borrows__user__lastname }}</a></td>
+            <td>{{ book.borrows__date_received }}</td>
+            <td>{{ book.latest_return_date }}</td>
           {% else %}
+            <td></td>
+            <td></td>
             <td></td>
           {% endif %}
           <td>
