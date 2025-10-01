@@ -1,11 +1,9 @@
 import sys
 
 import requests
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseNotFound, Http404, HttpResponse, HttpResponseBadRequest, HttpResponseServerError, \
     HttpResponseForbidden
 from django.shortcuts import render, redirect
-from django.template.defaulttags import lorem
 from django.views.generic import ListView
 
 from blog.models import Post

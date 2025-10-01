@@ -8,7 +8,7 @@
     <h1 class="mb-5">Posts:</h1>
     {% for post in posts %}
     <div class="card mb-3">
-            <h6 class="card-subtitle mb-2 text-body-secondary">Source: {{ post.source.name }}</h6>
+        <h6 class="card-subtitle mb-2 text-body-secondary">Source: {{ post.source.name }}</h6>
         <img src="{{ post.urlToImage }}" class="card-img-top" alt="{{ post.title }}">
         <div class="card-body">
             <h5 class="card-title">{{ post.title }}</h5>
