@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
@@ -17,7 +18,8 @@ class Product(models.Model):
 class TypeProduct(models.Model):
     type = models.CharField(max_length=100, null=False, blank=False)
     date_to = models.DateField(null=False, blank=False, default=timezone.now)
-    user_moderator = models.ForeignKey('auth.User', on_delete=models.CASCADE, null=False, related_name='user_moderator')
+    user_moderator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False, related_name='user_moderator')
+    # user_moderator = models.ForeignKey('auth.User', on_delete=models.CASCADE, null=False, related_name='user_moderator')
 
     def __str__(self):
         return f'Type: {self.type}'
