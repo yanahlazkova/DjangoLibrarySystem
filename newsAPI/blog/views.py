@@ -10,27 +10,46 @@ from blog.models import Post
 from newsAPI import settings
 
 
-def index(request):
-    # from faker import Faker
+# def index(request):
+#     # from faker import Faker
+#
+#     # fake = Faker(locale='uk_UA')
+#     # posts = ['post1', 'post2', 'post3', 'post4', 'post5', 'post6']
+#
+#     # list_posts = [{'title': post.capitalize(),
+#     #                'data': fake.date_time(),
+#     #                'body': fake.text(200)} for post in posts]
+#
+#     api_key = settings.NEWS_API_KEY  # оголосіть у .env
+#     url = f'https://newsapi.org/v2/top-headlines?country=us&apiKey={api_key}'
+#     resp = requests.get(url).json()
+#
+#     print(resp)
+#
+#     list_posts = resp.get('articles', [])
+#     context = {
+#         'posts': list_posts
+#     }
+#     return render(request, 'blog/index.html', context)
 
-    # fake = Faker(locale='uk_UA')
-    # posts = ['post1', 'post2', 'post3', 'post4', 'post5', 'post6']
 
-    # list_posts = [{'title': post.capitalize(),
-    #                'data': fake.date_time(),
-    #                'body': fake.text(200)} for post in posts]
+class NewsListView(ListView):
+    model = Post
+    template_name = 'blog/index.html'
+    context_object_name = 'posts'
+    paginate_by = 10
 
-    api_key = settings.NEWS_API_KEY  # оголосіть у .env
-    url = f'https://newsapi.org/v2/top-headlines?country=us&apiKey={api_key}'
-    resp = requests.get(url).json()
+    def get_queryset(self):
+        api_key = settings.NEWS_API_KEY  # оголосіть у .env
+        url = f'https://newsapi.org/v2/top-headlines?country=us&apiKey={api_key}'
+        resp = requests.get(url).json()
+        return resp.get('articles', [])
 
-    print(resp)
+    def get_context_data(self, *, object_list =None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'NewsAPI'
+        return context
 
-    list_posts = resp.get('articles', [])
-    context = {
-        'posts': list_posts
-    }
-    return render(request, 'blog/index.html', context)
 
 # class NewsListView(LoginRequiredMixin, ListView):
 # 	template_name = 'index.html'
