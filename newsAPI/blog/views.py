@@ -4,7 +4,7 @@ import requests
 from django.http import HttpResponseNotFound, Http404, HttpResponse, HttpResponseBadRequest, HttpResponseServerError, \
     HttpResponseForbidden
 from django.shortcuts import render, redirect
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from blog.models import Post
 from newsAPI import settings
@@ -51,15 +51,11 @@ class NewsListView(ListView):
         return context
 
 
-# class NewsListView(LoginRequiredMixin, ListView):
-# 	template_name = 'index.html'
-# 	context_object_name = 'articles'
-#
-# 	def get_queryset(self):
-# 		api_key = settings.NEWS_API_KEY  # оголосіть у .env
-# 		url = f'https://newsapi.org/v2/top-headlines?country=ua&apiKey={api_key}'
-# 		resp = requests.get(url).json()
-# 		return resp.get('articles', [])
+class AddPostView(DetailView):
+    model = Post
+    template_name = 'blog/detail.html'
+    context_object_name = 'post'
+
 
 
 def archive(request, year):
