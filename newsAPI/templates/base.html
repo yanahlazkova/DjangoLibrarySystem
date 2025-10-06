@@ -49,12 +49,19 @@
 
     </div>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% if user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'login' %}">Увійти</a>
+          <a class="nav-link" href="#"> {{ user.username }} </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Реєстрація</a>
+          <a class="nav-link" href="{% url 'user:logout' %}"> Exit</a>
         </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'user:login' %}">Увійти/Реєстрація</a>
+        </li>
+        {% endif %}
+
       </ul>
   </div>
 </nav>
