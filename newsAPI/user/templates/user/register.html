@@ -1,0 +1,40 @@
+{% extends 'blog/base_blog.html' %}
+
+{% block title %}
+    Login user
+{% endblock %}
+
+{% block content %}
+    <h1 class="m-5">Реєстрація:</h1>
+    <p style="color: red">{{ error }}</p>
+    <form action="{% url 'user:sign_up' %}" method="post">
+    {% csrf_token %}
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="login" placeholder="login" value="{{ new_user.username }}" name="username">
+        <label for="login" class="form-label">Login</label>
+<!--        <div id="loginHelp" class="form-text">Enter your email to login.</div>-->
+      </div>
+      <div class="form-floating mb-3">
+        <input type="firstname" class="form-control" id="firstnameInput" placeholder="firstname" value="{{ new_user.first_name }}" name="first_name">
+        <label for="firstnameInput">Ім'я</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="lastname" class="form-control" id="lastnameInput" placeholder="lastname" value="{{ new_user.last_name }}" name="last_name">
+        <label for="lastnameInput">Прізвище</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="floatingEmail" placeholder="Email" value="{{ new_user.email }}" name="email">
+        <label for="floatingEmail">Email</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="password" placeholder="password" value="{{ new_user.password }}" name="password">
+        <label for="password" class="form-label">Пароль</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="password2" placeholder="password2" value="{{ new_user.password }}" name="password2">
+        <label for="password2" class="form-label">Повтор пароля</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+{% endblock content %}

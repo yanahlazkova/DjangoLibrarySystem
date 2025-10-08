@@ -11,7 +11,8 @@
     {% csrf_token %}
       <div class="mb-3">
         <label for="login" class="form-label">Email address</label>
-        <input type="text" class="form-control" id="login" aria-describedby="loginHelp" name="login">
+        <input type="text" class="form-control" id="login" aria-describedby="loginHelp" name="username"
+               {% if user %} value="{{ user_data.username }}" {% endif %}>
         <div id="loginHelp" class="form-text">Enter your email to login.</div>
       </div>
       <div class="mb-3">
@@ -19,8 +20,7 @@
         <input type="password" class="form-control" id="password" name="password">
       </div>
       <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="checkbox">
-        <label class="form-check-label" for="checkbox">Check me out</label>
+        <a href="{% url 'user:sign_up' %}">Реєстрація</a>
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
