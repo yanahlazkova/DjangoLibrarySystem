@@ -44,9 +44,6 @@ def register(request):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
             user.save()
-            # user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
-            # if user and user.is_active:
-            #     login(request, user)
             return render(request, 'user/login.html', {"form": form, 'user_data': user})
 
         return render(request, "user/register.html", {"error": form.errors, "form": form})

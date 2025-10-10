@@ -10,45 +10,41 @@ from blog.models import Post
 from newsAPI import settings
 
 
-# def index(request):
-#     # from faker import Faker
-#
-#     # fake = Faker(locale='uk_UA')
-#     # posts = ['post1', 'post2', 'post3', 'post4', 'post5', 'post6']
-#
-#     # list_posts = [{'title': post.capitalize(),
-#     #                'data': fake.date_time(),
-#     #                'body': fake.text(200)} for post in posts]
-#
-#     api_key = settings.NEWS_API_KEY  # оголосіть у .env
-#     url = f'https://newsapi.org/v2/top-headlines?country=us&apiKey={api_key}'
-#     resp = requests.get(url).json()
-#
-#     print(resp)
-#
-#     list_posts = resp.get('articles', [])
-#     context = {
-#         'posts': list_posts
-#     }
-#     return render(request, 'blog/index.html', context)
+CATEGORY_CHOICES = [
+    'business',
+    'entertainment',
+    'education',
+    'health',
+    'sports',
+    'technology',
+    'travel',
+    'general',
+]
 
 
 class NewsListView(ListView):
     model = Post
     template_name = 'blog/index.html'
     context_object_name = 'posts'
-    paginate_by = 10
+    # paginate_by = 10
 
     def get_queryset(self):
-        api_key = settings.NEWS_API_KEY  # оголосіть у .env
+        # print(self.qwargs['cat_slug'])
+        api_key = settings.NEWS_API_KEY # оголосіть у .env
         url = f'https://newsapi.org/v2/top-headlines?country=us&apiKey={api_key}'
         resp = requests.get(url).json()
+
         return resp.get('articles', [])
 
     def get_context_data(self, *, object_list =None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'NewsAPI'
+        context['category'] = CATEGORY_CHOICES
         return context
+
+
+def posts_by_category(request, category):
+    return HttpResponse(f'category: {category}')
 
 
 class AddPostView(DetailView):
