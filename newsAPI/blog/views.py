@@ -63,7 +63,7 @@ class NewsCategory(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         cat = self.kwargs['cat_slug']
-        context['title'] = 'NewsAPI'
+        context['title'] = 'NewsAPI' + ' - "' + cat.title() + '"' if cat != 'general' else 'NewAPI'
         context['posts_cat'] = f'category "{cat.title()}"' if cat != 'general' else ''
         context['cat_slug'] = cat.title() if cat != 'general' else ''
         context['category'] = CATEGORY_CHOICES
