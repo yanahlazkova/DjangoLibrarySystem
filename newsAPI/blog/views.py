@@ -13,11 +13,11 @@ from newsAPI import settings
 CATEGORY_CHOICES = [
     'business',
     'entertainment',
-    'education',
+    # 'education',
     'health',
     'sports',
     'technology',
-    'travel',
+    'science',
     'general',
 ]
 
@@ -30,22 +30,44 @@ class NewsListView(ListView):
 
     def get_queryset(self):
         # print(self.qwargs['cat_slug'])
-        api_key = settings.NEWS_API_KEY # оголосіть у .env
+        api_key = settings.NEWS_API_KEY # оголошено у .env
         url = f'https://newsapi.org/v2/top-headlines?country=us&apiKey={api_key}'
         resp = requests.get(url).json()
 
         return resp.get('articles', [])
 
-    def get_context_data(self, *, object_list =None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'NewsAPI'
         context['category'] = CATEGORY_CHOICES
         return context
 
+#
+# def posts_by_category(request, cat_slug):
+#     return HttpResponse(f'category: {cat_slug}')
 
-def posts_by_category(request, category):
-    return HttpResponse(f'category: {category}')
 
+class NewsCategory(ListView):
+    model = Post
+    template_name = 'blog/index.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        api_key = settings.NEWS_API_KEY  # оголошено у .env
+        cat = self.kwargs['cat_slug']
+        url = f'https://newsapi.org/v2/top-headlines?country=us&category={cat}&apiKey={api_key}'
+        resp = requests.get(url).json()
+
+        return resp.get('articles', [])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cat = self.kwargs['cat_slug']
+        context['title'] = 'NewsAPI'
+        context['posts_cat'] = f'category "{cat.title()}"' if cat != 'general' else ''
+        context['cat_slug'] = cat.title() if cat != 'general' else ''
+        context['category'] = CATEGORY_CHOICES
+        return context
 
 class AddPostView(DetailView):
     model = Post
